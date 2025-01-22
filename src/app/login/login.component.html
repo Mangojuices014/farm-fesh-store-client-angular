@@ -1,0 +1,42 @@
+<div class="page-body">
+  <div class="container" id="container">
+    <div class="form-container sign-in-container">
+      <form method="post" #signinForm="ngForm" (ngSubmit)="onLogin(signinForm)">
+        <h1>Đăng nhập</h1>
+        <div class="social-container">
+          <a href="#" class="social"><i class="fab fa-facebook-f"></i></a>
+          <a href="#" class="social"><i class="fab fa-google-plus-g"></i></a>
+          <a href="#" class="social"><i class="fab fa-linkedin-in"></i></a>
+        </div>
+        <span>dùng với tài khoản khác</span>
+        <input
+          type="text"
+          name="username"
+          placeholder="Tên người dùng"
+          required ngModel
+        />
+        <input
+          type="password"
+          name="password"
+          placeholder="Mật khẩu"
+          required ngModel
+        />
+        <a href="#">Quên mật khẩu?</a>
+        <input type="submit" value="Đăng nhập" class="form-submit" />
+      </form>
+    </div>
+    <div class="overlay-container">
+      <div class="overlay">
+        <div class="overlay-panel overlay-right">
+          <h1>Hello, Friend!</h1>
+          <p>Nhập thông tin cá nhân của bạn và bắt đầu với chúng tôi</p>
+          <button class="ghost" id="signUp" [routerLink]="'/register'">Đăng ký</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+@if (toastVisible) {
+  <app-toast [heading]="toastHeading" [description]="toastDescription">
+  </app-toast>
+}

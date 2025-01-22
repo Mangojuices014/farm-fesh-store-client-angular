@@ -1,0 +1,27 @@
+<div class="container" id="container">
+  <div class="form-container sign-in-container">
+    <form method="post" #signupform="ngForm" (submit)="onSubmit(signupform)">
+      <h1>Đăng Ký</h1>
+      <input type="text" placeholder="First Name" required ngModel name="firstName" />
+      <input type="text" placeholder="Last Name" required ngModel name="lastName" />
+      <input type="text" placeholder="User Name" required ngModel name="userName" />
+      <input type="email" placeholder="Email" required ngModel name="email" />
+      <input type="password" placeholder="Mật khẩu" required ngModel name="password" />
+      <a href="#">Quên mật khẩu?</a>
+      <input class="form-submit" type="submit" value="Đăng ký" />
+    </form>
+  </div>
+  <div class="overlay-container">
+    <div class="overlay">
+      <div class="overlay-panel overlay-right">
+        <h1>Xin Chào bạn!</h1>
+        <p>Nhập thông tin cá nhân của bạn và bắt đầu hành trình với chúng tôi</p>
+        <button class="ghost" id="signUp" [routerLink]="'/login'">Đăng nhập</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+@if(toastVisible) {
+  <app-toast [heading]="toastHeading" [description]="toastDescription"></app-toast>
+}

@@ -1,0 +1,90 @@
+<main>
+  <app-header/>
+  <app-sidebar/>
+  <section>
+    <!-- banner -->
+    <div
+      style="background-image: url(./assets/img/bg_1.jpg.webp); background-position: center; background-size: cover; width: 100%; height: 60vh; filter: brightness(0.3);">
+    </div>
+
+    <!-- name brand -->
+    <div class="name__brand">
+      <div class="showtotop" style="font-size: 50px; font-weight: 900; color:#fff ;background: transparent">
+        Specialties
+      </div>
+      <ul class="breadcrumb">
+        <li class="breadcrumb__item"><a href="./index.html">Trang chủ</a> <i
+          class="fa-solid fa-chevron-right"></i></li>
+        <li class="breadcrumb__item">Menu<i class="fa-solid fa-chevron-right"></i></li>
+      </ul>
+    </div>
+
+    <div class="item dish">
+      <div class="container">
+        <div class="nav__change mt-2">
+          <div class="row g-0">
+            <div class="nav__change__item col-12 col-md-2">
+              <button class="button__change btn btn-warning">
+                Tất cả sản phẩm
+              </button>
+            </div>
+            <div class="nav__change__item col-12 col-md-2">
+              <button class="button__change"> Bữa trưa</button>
+            </div>
+            <div class="nav__change__item col-12 col-md-2">
+              <button class="button__change"> Bữa tối</button>
+            </div>
+            <div class="nav__change__item col-12 col-md-2">
+              <button class="button__change"> Nước uống</button>
+            </div>
+            <div class="nav__change__item col-12 col-md-2">
+              <button class="button__change"> Tráng miệng</button>
+            </div>
+            <div class="nav__change__item col-12 col-md-2">
+              <button class="button__change"> Rượu vang</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row g-0 menu__item active">
+      @if (loading) {
+        <div>Đang tải dữ liệu...</div>
+      }
+      @if (toastVisible) {
+        <div class="toast" [class.error]="toastHeading === 'Thất bại'">
+          <h4>{{ toastHeading }}</h4>
+          <p>{{ toastDescription }}</p>
+        </div>
+      }
+      @if (products.length > 0) {
+        @for (product of products; track product.id) {
+            <div class="col-md-6">
+              <div class="row g-0 dish__item showtotop dl-02">
+                <div class="col-md-12 col-lg-6">
+                  <div class="dish__img" style="background-image: url('../../assets/img/aoPhong.jpg');"></div>
+                </div>
+                <div class="col-md-12 col-lg-6 dish__desc">
+                  <div class="row g-0">
+                    <div class="col-8">
+                      <h3 class="dish__name">{{ product.name }}</h3>
+                    </div>
+                    <div class="col" style="text-align: right;">
+                      <span class="dish__price">{{ product.price }} VND</span>
+                    </div>
+                  </div>
+                  <p class="dish__prameter text">{{ product.description }}</p>
+                  <button class="btn btn-warning mx-3"> Đặt hàng</button>
+                  <button class="btn btn-primary">Thêm vào giỏ</button>
+                </div>
+              </div>
+            </div>
+        }
+      } @else {
+        <div class="text-center py-5">
+          <p>Không có sản phẩm nào.</p>
+        </div>
+      }
+      </div>
+    </div>
+  </section>
+</main>

@@ -59,11 +59,9 @@ export class ProfileComponent implements OnInit{
     this.toastHeading = heading;
     this.toastDescription = description;
     this.toastVisible = true;
-
     setTimeout(() => {
       this.toastVisible = false;
     }, 5000);
-
   }
 }
 

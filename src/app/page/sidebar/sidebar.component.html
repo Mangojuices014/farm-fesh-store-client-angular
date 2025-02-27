@@ -3,21 +3,28 @@
   <hr />
   <nav>
     <ul>
+      @if (isAdmin()) {
+        <li>
+          <a
+            routerLink="/process"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+          ><i class="fas fa-user"></i> Process</a>
+        </li>
+      }
       <li>
         <a
           routerLink="/profile"
           routerLinkActive="active"
           [routerLinkActiveOptions]="{ exact: true }"
-        ><i class="fas fa-user"></i> Profile</a
-        >
+        ><i class="fas fa-user"></i> Profile</a>
       </li>
       <li>
         <a
           routerLink="/products"
           routerLinkActive="active"
           [routerLinkActiveOptions]="{ exact: true }"
-        ><i class="fas fa-user"></i> Product</a
-        >
+        ><i class="fas fa-user"></i> Product</a>
       </li>
       <li>
         <button (click)="onLogout()">
@@ -27,4 +34,3 @@
     </ul>
   </nav>
 </aside>
-

@@ -4,11 +4,12 @@ import {HeaderComponent} from "../page/header/header.component";
 import {ProductService} from "../services/product/product.service";
 import {Product} from "../model/Product";
 import {ProductItemComponent} from "../product-item/product-item.component";
+import {ToastComponent} from "../toast/toast.component";
 
 @Component({
   selector: 'app-product',
   standalone: true,
-  imports: [SidebarComponent, HeaderComponent, ProductItemComponent],
+  imports: [SidebarComponent, HeaderComponent, ProductItemComponent, ToastComponent],
   templateUrl: './product.component.html',
   styleUrls: [
     './product.component.scss',
@@ -19,6 +20,7 @@ export class ProductComponent implements OnInit {
   loading = false;
   modalVisible = false;
   selectedProduct: Product | null = null;
+  toastHeading = ""; toastDescription = ""; toastVisible = false;
 
   constructor(private productService: ProductService) {}
 
@@ -56,13 +58,20 @@ export class ProductComponent implements OnInit {
   }
 
   onPlaceOrder(order: { product: Product, quantity: number }): void {
-    console.log('Đặt hàng thành công:', order);
-    alert(`Đặt hàng thành công: ${order.product.name} - Số lượng: ${order.quantity}`);
+    this.generateToast("Thành công",`Đặt hàng thành công: ${order.product.name} - Số lượng: ${order.quantity}`);
     this.closeOrderModal();
   }
 
   getImageId(imageUrl: string): string {
     const match = imageUrl.match(/\/d\/(.*?)\//);
-    return match ? match[1] : '';
+    return match ? match[1] : "";
+  }
+  generateToast(heading: string, description: string) {
+    this.toastHeading = heading;
+    this.toastDescription = description;
+    this.toastVisible = true;
+    setTimeout(() => {
+      this.toastVisible = false;
+    }, 5000);
   }
 }

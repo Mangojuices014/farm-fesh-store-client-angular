@@ -3,6 +3,7 @@ import {Router, RouterLink} from "@angular/router";
 import {AuthService} from "../services/auth/auth.service";
 import {FormsModule, NgForm} from "@angular/forms";
 import {ToastComponent} from "../toast/toast.component";
+import {JwtHelperService} from "@auth0/angular-jwt";
 
 @Component({
   selector: 'app-login',
@@ -14,7 +15,7 @@ import {ToastComponent} from "../toast/toast.component";
 export class LoginComponent {
   accountService = inject(AuthService);
   router = inject(Router);
-
+  private jwtHelper = new JwtHelperService();
   toastHeading = ""; toastDescription = ""; toastVisible = false;
 
   onLogin(form: NgForm) {
@@ -24,6 +25,19 @@ export class LoginComponent {
           const response = res as any;
           if (response?.data?.access_token) {
             localStorage.setItem("token", response.data.access_token);
+            const decodedToken = this.jwtHelper.decodeToken(
+              response.data.access_token
+            )
+            const roles = decodedToken?.realm_access?.roles || [];
+            console.log("Vai trò của người dùng:", roles);
+
+            if (roles.includes("ADMIN")) {
+              localStorage.setItem("role", "admin");
+              this.router.navigate(["/user"]);
+            } else {
+              localStorage.setItem("role", "user");
+              this.router.navigate(["/home"]);
+            }
             this.router.navigate(["/profile"]); // Chuyển hướng khi đăng nhập thành công
             form.reset();
           } else {

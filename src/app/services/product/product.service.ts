@@ -22,6 +22,4 @@ export class ProductService {
       this.noauth
     );
   }
-
-
 }

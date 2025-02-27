@@ -8,11 +8,13 @@ import {RegisterComponent} from "./app/register/register.component";
 import {LoginComponent} from "./app/login/login.component";
 import {AuthGuard} from "./app/config/auth.guard";
 import {ProductComponent} from "./app/product/product.component";
+import {TaskComponent} from "./app/task/task.component";
 const routes: Routes = [
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterComponent },
   { path: 'profile', component: ProfileComponent},
   { path: 'products', component: ProductComponent},
+  { path: 'process', component: TaskComponent},
   { path: '', redirectTo: '/login', pathMatch: 'full' }
 ];
 

@@ -27,6 +27,13 @@
         ><i class="fas fa-user"></i> Product</a>
       </li>
       <li>
+        <a
+          routerLink="/cart"
+          routerLinkActive="active"
+          [routerLinkActiveOptions]="{ exact: true }"
+        ><i class="fas fa-cart-shopping"></i> Cart</a>
+      </li>
+      <li>
         <button (click)="onLogout()">
           <i class="fas fa-right-from-bracket"></i> Logout
         </button>

@@ -5,11 +5,25 @@ import {ProductService} from "../services/product/product.service";
 import {Product} from "../model/Product";
 import {ProductItemComponent} from "../product-item/product-item.component";
 import {ToastComponent} from "../toast/toast.component";
+import { FormsModule } from '@angular/forms';
+import { NzSelectModule } from 'ng-zorro-antd/select';
+import {Cart} from "../model/Cart";
+// import {CartItemComponent} from "../cart-item/cart-item.component";
+import {CartComponent} from "../cart/cart.component";
+
 
 @Component({
   selector: 'app-product',
   standalone: true,
-  imports: [SidebarComponent, HeaderComponent, ProductItemComponent, ToastComponent],
+  imports: [
+    SidebarComponent,
+    HeaderComponent,
+    ProductItemComponent,
+    ToastComponent,
+    FormsModule,
+    NzSelectModule,
+    CartComponent
+  ],
   templateUrl: './product.component.html',
   styleUrls: [
     './product.component.scss',
@@ -17,17 +31,23 @@ import {ToastComponent} from "../toast/toast.component";
 })
 export class ProductComponent implements OnInit {
   products: Product[] = [];
+  cart: Cart = { productId: '' , quantity: 0 };
   loading = false;
   modalVisible = false;
+  modalType : string = '';
   selectedProduct: Product | null = null;
   toastHeading = ""; toastDescription = ""; toastVisible = false;
+  isCartVisible = false; // Ban đầu ẩn giỏ hàng
 
-  constructor(private productService: ProductService) {}
+  toggleCart() {
+    this.isCartVisible = !this.isCartVisible;
+    console.log("Giỏ hàng hiển thị: ", this.isCartVisible);
+  }
+  constructor( private productService: ProductService,) {}
 
   ngOnInit(): void {
     this.loadProducts();
   }
-
   loadProducts(): void {
     this.loading = true;
     this.productService.getAllProduct().subscribe({
@@ -35,6 +55,7 @@ export class ProductComponent implements OnInit {
         if (res && res.data) {
           this.products = res.data;
           this.loading = false;
+          console.log(res.data);
         } else {
           console.warn('Dữ liệu trả về không hợp lệ:', res);
           this.loading = false;
@@ -49,6 +70,13 @@ export class ProductComponent implements OnInit {
 
   openOrderModal(product: Product): void {
     this.selectedProduct = product;
+    this.modalType = 'order';
+    this.modalVisible = true;
+  }
+
+  openCartModal(product: Product): void {
+    this.selectedProduct = product;
+    this.modalType = 'cart';
     this.modalVisible = true;
   }
 
@@ -57,8 +85,18 @@ export class ProductComponent implements OnInit {
     this.selectedProduct = null;
   }
 
+  closeCartModal(): void {
+    this.modalVisible = false;
+    this.selectedProduct = null;
+  }
+
   onPlaceOrder(order: { product: Product, quantity: number }): void {
     this.generateToast("Thành công",`Đặt hàng thành công: ${order.product.name} - Số lượng: ${order.quantity}`);
+    this.closeOrderModal();
+  }
+
+  onPlaceCart(order: { product: Product, quantity: number }): void {
+    this.generateToast("Thành công",`Thêm vào giỏ hàng thành công: ${order.product.name} - Số lượng: ${order.quantity}`);
     this.closeOrderModal();
   }
 
@@ -74,4 +112,6 @@ export class ProductComponent implements OnInit {
       this.toastVisible = false;
     }, 5000);
   }
+
+  protected readonly toolbar = toolbar;
 }

@@ -2,13 +2,43 @@
   <app-header />
   <app-sidebar />
   <section>
-    <!-- Banner và các phần khác -->
 
-    <div class="item dish">
+    <!-- banner -->
+    <div
+      style="background-image: url(../../assets/img/demonFruit.jpg);  border-radius: 10px;
+       background-position: center; background-size: cover; width: 100%; height: 60vh; filter: brightness(0.3);">
+    </div>
+
+    <!-- name brand -->
+    <div class="name__brand">
+      <div class="showtotop" style="font-size: 50px; font-weight: 900; color:#fff ;background: transparent">
+        Specialties</div>
+      <ul class="breadcrumb">
+        <li class="breadcrumb__item"><a href="./index.html">Trang chủ</a> <i
+          class="fa-solid fa-chevron-right"></i> </li>
+        <li class="breadcrumb__item">Menu<i class="fa-solid fa-chevron-right"></i></li>
+      </ul>
+    </div>
+
+    <!-- Banner và các phần khác -->
+    <div class="item dish my-3">
       <div class="container">
         <!-- Nav và các phần khác -->
+        <button class="floating-cart-button" (click)="toggleCart()">
+          <i class="fas fa-shopping-cart"></i>
+        </button>
+        <nz-select class="mb-3 mx-3" nzShowSearch nzAllowClear nzPlaceHolder="Tìm danh mục sản phẩm">
+          <nz-option nzLabel="Jack" nzValue="jack"></nz-option>
+          <nz-option nzLabel="Lucy" nzValue="lucy"></nz-option>
+          <nz-option nzLabel="Tom" nzValue="tom"></nz-option>
+        </nz-select>
 
-          <div class="row g-0 menu__item active">
+        <nz-select class="mb-3 mx-3" nzShowSearch nzAllowClear nzPlaceHolder="Giá">
+          <nz-option nzLabel="Từ cao đến thấp" nzValue="hight"></nz-option>
+          <nz-option nzLabel="Từ thấp đến cao" nzValue="low"></nz-option>
+        </nz-select>
+
+        <div class="row g-0 menu__item active">
             @if (loading) {
               <div>Đang tải dữ liệu...</div>
             }
@@ -29,12 +59,12 @@
                           <h3 class="dish__name">{{ product.name }}</h3>
                         </div>
                         <div class="col" style="text-align: right;">
-                          <span class="dish__price">{{ product.price }} VND</span>
+                          <span class="dish__price mx-5">{{ product.price }} VND</span>
                         </div>
                       </div>
                       <p class="dish__prameter text">{{ product.description }}</p>
                       <button (click)="openOrderModal(product)" class="btn btn-warning mx-3">Đặt hàng</button>
-                      <button class="btn btn-primary">Thêm vào giỏ</button>
+                      <button (click)="openCartModal(product)" class="btn btn-danger my-5">Thêm vào giỏ</button>
                     </div>
                   </div>
                 </div>
@@ -50,13 +80,26 @@
   </section>
 
   <!-- Modal chi tiết sản phẩm -->
-  @if (modalVisible && selectedProduct) {
+  @if (modalVisible && selectedProduct && modalType === 'order') {
     <app-product-item
       [product]="selectedProduct"
       (closeModal)="closeOrderModal()"
       (placeOrder)="onPlaceOrder($event)"
     />
   }
+
+  @if (isCartVisible){
+    <app-cart [isOpen]="isCartVisible" (closeEvent)="toggleCart()"/>
+  }
+
+<!--  @if (modalVisible && selectedProduct && modalType === 'cart') {-->
+<!--    <app-cart-item-->
+<!--      [product]="selectedProduct"-->
+<!--      (closeModal)="closeCartModal()"-->
+<!--      (placeOrder)="onPlaceCart($event)"-->
+<!--    />-->
+<!--  }-->
+
 </main>
 @if (toastVisible) {
   <app-toast [heading]="toastHeading" [description]="toastDescription">

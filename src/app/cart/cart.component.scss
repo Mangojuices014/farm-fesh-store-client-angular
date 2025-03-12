@@ -1,0 +1,340 @@
+@import url('https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+// Variables
+$primary-color: #C8A97E;
+$secondary-color: #343a40;
+$background-color: #fff;
+$text-color: #333;
+$border-radius: 8px;
+$box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+$transition: all 0.3s ease;
+
+// Cart Toggle Button
+.cart-toggle {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 999;
+  cursor: pointer;
+
+  .cart-icon {
+    position: relative;
+    background-color: $primary-color;
+    color: white;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: $box-shadow;
+    transition: $transition;
+
+    i {
+      font-size: 20px;
+    }
+
+    &:hover {
+      transform: scale(1.05);
+    }
+
+    .cart-badge {
+      position: absolute;
+      top: -5px;
+      right: -5px;
+      background-color: $secondary-color;
+      color: white;
+      border-radius: 50%;
+      width: 22px;
+      height: 22px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      font-weight: bold;
+    }
+  }
+}
+
+// Shopping Container
+.shopping__container {
+  position: fixed;
+  top: 0;
+  right: -400px;
+  width: 380px;
+  height: 100%;
+  background: $background-color;
+  box-shadow: -5px 0 15px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+  transition: right 0.4s ease;
+  overflow: hidden;
+
+  &.open {
+    right: 0;
+  }
+}
+
+.shopping__cart {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding: 0;
+  position: relative;
+  font-family: 'Poppins', sans-serif;
+}
+
+// Cart Header
+.cart-header {
+  padding: 25px 20px 15px;
+  text-align: center;
+  background-color: $secondary-color;
+  color: white;
+
+  .brand-title {
+    font-family: 'Great Vibes', cursive;
+    color: $primary-color;
+    font-size: 48px;
+    margin: 0;
+    line-height: 1.2;
+  }
+
+  .cart-subtitle {
+    font-size: 14px;
+    margin-top: 5px;
+    opacity: 0.8;
+  }
+}
+
+// Empty Cart
+.empty-cart {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 50px 20px;
+  text-align: center;
+
+  .empty-cart-icon {
+    font-size: 60px;
+    color: #ddd;
+    margin-bottom: 20px;
+  }
+
+  p {
+    font-size: 18px;
+    color: #999;
+    margin-bottom: 30px;
+  }
+}
+
+// Shopping List
+.shopping__list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  overflow-y: auto;
+  flex: 1;
+  padding: 20px;
+}
+
+.cart-item {
+  display: flex;
+  align-items: center;
+  padding: 15px 0;
+  border-bottom: 1px solid #f0f0f0;
+
+  &:last-child {
+    border-bottom: none;
+  }
+
+  .item-image {
+    width: 80px;
+    height: 80px;
+    border-radius: $border-radius;
+    overflow: hidden;
+    margin-right: 15px;
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+  }
+
+  .item-details {
+    flex: 1;
+
+    .item-name {
+      font-size: 16px;
+      font-weight: 500;
+      margin: 0 0 5px;
+      color: $text-color;
+    }
+
+    .item-price {
+      font-size: 15px;
+      font-weight: 600;
+      color: $primary-color;
+      margin-bottom: 10px;
+    }
+
+    .item-controls {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+
+      .quantity-control {
+        display: flex;
+        align-items: center;
+        border: 1px solid #eee;
+        border-radius: 4px;
+        overflow: hidden;
+
+        .quantity-btn {
+          background: #f8f8f8;
+          border: none;
+          width: 28px;
+          height: 28px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          cursor: pointer;
+          transition: $transition;
+
+          &:hover {
+            background: #eee;
+          }
+
+          &:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+          }
+        }
+
+        .quantity {
+          padding: 0 10px;
+          font-size: 14px;
+          min-width: 30px;
+          text-align: center;
+        }
+      }
+
+      .remove-btn {
+        background: none;
+        border: none;
+        color: #dc3545;
+        cursor: pointer;
+        transition: $transition;
+
+        &:hover {
+          transform: scale(1.1);
+        }
+      }
+    }
+  }
+}
+
+// Cart Summary
+.cart-summary {
+  background-color: #f9f9f9;
+  padding: 20px;
+  border-top: 1px solid #eee;
+
+  .summary-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+    font-size: 14px;
+
+    &.total {
+      margin-top: 15px;
+      padding-top: 15px;
+      border-top: 1px solid #eee;
+      font-size: 18px;
+      font-weight: 600;
+      color: $secondary-color;
+    }
+  }
+}
+
+// Cart Actions
+.cart-actions {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+
+  button {
+    border: none;
+    padding: 12px;
+    border-radius: $border-radius;
+    font-weight: 500;
+    cursor: pointer;
+    transition: $transition;
+  }
+
+  .btn-checkout {
+    background-color: $primary-color;
+    color: white;
+
+    &:hover {
+      background-color: darken($primary-color, 10%);
+    }
+  }
+
+  .btn-continue {
+    background-color: transparent;
+    border: 1px solid $secondary-color;
+    color: $secondary-color;
+
+    &:hover {
+      background-color: $secondary-color;
+      color: white;
+    }
+  }
+}
+
+// Close Button
+.shopping__close {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  background: none;
+  border: none;
+  color: white;
+  font-size: 20px;
+  cursor: pointer;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: $transition;
+  z-index: 2;
+
+  &:hover {
+    transform: scale(1.1);
+  }
+}
+
+// Responsive Adjustments
+@media (max-width: 480px) {
+  .shopping__container {
+    width: 100%;
+    right: -100%;
+  }
+
+  .cart-item {
+    .item-image {
+      width: 60px;
+      height: 60px;
+    }
+
+    .item-details {
+      .item-name {
+        font-size: 14px;
+      }
+    }
+  }
+}

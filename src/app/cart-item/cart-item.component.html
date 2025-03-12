@@ -1,0 +1,30 @@
+<!--@if (product) {-->
+<!--  <div class="detail-product-modal">-->
+<!--    <div class="modal-content">-->
+<!--      <span class="close" (click)="onCloseModal()">&times;</span>-->
+<!--      <h2 style="font-weight: bold">{{ product.name }}</h2>-->
+<!--      @if (product.image) {-->
+<!--        <img [src]="'https://drive.google.com/thumbnail?id=' + getImageId(product.image)" [alt]="product.name"-->
+<!--             style="height: 150px; object-fit: cover;"-->
+<!--        />-->
+<!--      }-->
+<!--      <p class="product-name-highlight">{{ product.description }}</p>-->
+<!--      <p><strong>Giá:</strong> {{ product.price }}</p>-->
+<!--      <p><strong>Số lượng còn lại:</strong> {{ product.quantityProduct }}</p>-->
+<!--      <label for="quantity"><strong>Số lượng:</strong></label>-->
+<!--      <input-->
+<!--        type="number"-->
+<!--        id="quantity"-->
+<!--        [(ngModel)]="quantity"-->
+<!--        min="1"-->
+<!--      />-->
+<!--      <button (click)="onPlaceCart()" class="btn btn-danger" [disabled]="loading">-->
+<!--        @if (loading) { Đang thêm vào giỏ hàng... } @else {Thêm vào giỏ hàng }-->
+<!--      </button></div>-->
+<!--  </div>-->
+<!--}-->
+
+<!--@if (toastVisible) {-->
+<!--  <app-toast [heading]="toastHeading" [description]="toastDescription">-->
+<!--  </app-toast>-->
+<!--}-->

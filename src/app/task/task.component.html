@@ -1,0 +1,45 @@
+<main class="main-container">
+  <div class="content-box">
+    <app-header />
+    <app-sidebar />
+    @if (isAdmin()) {
+      <h1 class="title">Admin Task Approval</h1>
+
+      @if (isLoading()) {
+        <div class="loading-container">
+          <div class="loading-spinner"></div>
+        </div>
+      } @else if (error()) {
+        <div class="error-box">
+          <strong>Error:</strong> {{ error() }}
+        </div>
+      } @else if (tasks().length === 0) {
+        <div class="info-box">No tasks available for approval.</div>
+      } @else {
+        <div class="table-container">
+          <table class="task-table">
+            <thead>
+            <tr>
+              <th>Task ID</th>
+              <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+              @for (task of tasks(); track task.id) {
+                <tr>
+                  <td>{{ task.id }}</td>
+                  <td>
+                    <button (click)="approveTask(task.id)" class="btn approve">✅ Approve</button>
+                    <button (click)="rejectTask(task.id)" class="btn reject">❌ Reject</button>
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      }
+    } @else {
+      <div class="no-permission">❌ You do not have permission to view this page.</div>
+    }
+  </div>
+</main>

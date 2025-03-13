@@ -1,6 +1,6 @@
 @import url('https://fonts.googleapis.com/css?family=Montserrat:400,800');
 .container {
-  background-color: #fff;
+  background-color: #918f8f;
   border-radius: 10px;
   box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
   position: relative;
@@ -61,7 +61,7 @@
 .overlay {
   background: #FF416C;
   background: -webkit-linear-gradient(to right, #FF4B2B, #FF416C);
-  background: linear-gradient(to right, #2d0f4f, #8623a3);
+  background: linear-gradient(to right, #1d3512, #e49638);
   background-repeat: no-repeat;
   background-size: cover;
   background-position: 0 0;
@@ -169,7 +169,7 @@ form {
 }
 .form-submit {
   color: white;
-  background-color: #2d0f4f;
+  background-color: #ffa80d;
   border-radius: 20px;
   padding: 10px 20px;
   border: none;

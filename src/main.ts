@@ -33,7 +33,9 @@ const routes: Routes = [
   imports: [RouterModule],
   template: `<router-outlet></router-outlet>`
 })
-export class App {}
+export class App {
+  title = "HPB"
+}
 
 bootstrapApplication(App, {
   providers: [

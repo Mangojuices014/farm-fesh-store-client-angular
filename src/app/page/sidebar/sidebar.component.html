@@ -1,43 +1,92 @@
-<aside>
-  <h2>HPBANK</h2>
-  <hr />
-  <nav>
-    <ul>
-      @if (isAdmin()) {
-        <li>
-          <a
-            routerLink="/process"
-            routerLinkActive="active"
-            [routerLinkActiveOptions]="{ exact: true }"
-          ><i class="fas fa-user"></i> Process</a>
-        </li>
-      }
-      <li>
-        <a
-          routerLink="/profile"
-          routerLinkActive="active"
-          [routerLinkActiveOptions]="{ exact: true }"
-        ><i class="fas fa-user"></i> Profile</a>
-      </li>
-      <li>
-        <a
-          routerLink="/products"
-          routerLinkActive="active"
-          [routerLinkActiveOptions]="{ exact: true }"
-        ><i class="fas fa-user"></i> Product</a>
-      </li>
-      <li>
-        <a
-          routerLink="/cart"
-          routerLinkActive="active"
-          [routerLinkActiveOptions]="{ exact: true }"
-        ><i class="fas fa-cart-shopping"></i> Cart</a>
-      </li>
-      <li>
-        <button (click)="onLogout()">
-          <i class="fas fa-right-from-bracket"></i> Logout
-        </button>
-      </li>
-    </ul>
-  </nav>
+<aside class="mr-5">
+  <div class="sidebar-header">
+    <div class="logo-container">
+      <div class="logo">
+        <span class="logo-text">Feliciano</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="sidebar-content">
+    <div class="user-profile">
+      <div class="avatar">
+        <img src="#" alt="User Avatar">
+        <span class="status-indicator"></span>
+      </div>
+      <div class="user-info">
+        <h3>Xin chào</h3>
+        <p>{{ isAdmin() ? 'Quản trị viên' : 'Khách hàng' }}</p>
+      </div>
+    </div>
+
+    <div class="divider">
+      <span>MENU</span>
+    </div>
+
+    <nav class="sidebar-menu">
+      <ul>
+        @for (item of menuItems; track item.route) {
+          @if (!item.adminOnly || (item.adminOnly && isAdmin())) {
+            <li [class.active]="isRouteActive(item.route)" [class.has-submenu]="item.children?.length">
+              @if (item.children?.length) {
+                <div
+                  class="menu-item"
+                  [class.active]="isRouteActive(item.route)"
+                  [class.expanded]="isSubmenuExpanded(item.route)"
+                  (click)="toggleSubmenu(item.route)"
+                >
+                  <div class="menu-icon">
+                    <i [class]="item.icon"></i>
+                  </div>
+                  <span class="menu-label">{{ item.label }}</span>
+                  <i class="fa-solid submenu-arrow" [class.fa-chevron-down]="isSubmenuExpanded(item.route)" [class.fa-chevron-right]="!isSubmenuExpanded(item.route)"></i>
+                </div>
+
+                @if (isSubmenuExpanded(item.route)) {
+                  <ul class="submenu" [@expandCollapse]>
+                    @for (subItem of item.children; track subItem.route) {
+                      <li [class.active]="isRouteActive(subItem.route)">
+                        <a
+                          [routerLink]="subItem.route"
+                          routerLinkActive="active"
+                          class="submenu-item"
+                        >
+                          <i [class]="subItem.icon"></i>
+                          <span>{{ subItem.label }}</span>
+                        </a>
+                      </li>
+                    }
+                  </ul>
+                }
+              } @else {
+                <a
+                  [routerLink]="item.route"
+                  routerLinkActive="active"
+                  [routerLinkActiveOptions]="{ exact: item.route === '/home' }"
+                  class="menu-item"
+                >
+                  <div class="menu-icon">
+                    <i [class]="item.icon"></i>
+                  </div>
+                  <span class="menu-label">{{ item.label }}</span>
+                </a>
+              }
+            </li>
+          }
+        }
+      </ul>
+    </nav>
+  </div>
+
+  <div class="sidebar-footer">
+    <button class="logout-button" (click)="onLogout()">
+      <i class="fa-solid fa-sign-out-alt"></i>
+      <span>Đăng xuất</span>
+    </button>
+
+    <div class="sidebar-footer-info">
+      <p>Feliciano Restaurant</p>
+      <p class="version">v1.0.0</p>
+    </div>
+  </div>
 </aside>

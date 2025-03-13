@@ -1,13 +1,13 @@
+<div class="three-js-background" #container></div>  <!-- Three.js background -->
 <div class="container" id="container">
   <div class="form-container sign-in-container">
     <form method="post" #signupform="ngForm" (submit)="onSubmit(signupform)">
       <h1>Đăng Ký</h1>
-      <input type="text" placeholder="First Name" required ngModel name="firstName" />
-      <input type="text" placeholder="Last Name" required ngModel name="lastName" />
-      <input type="text" placeholder="User Name" required ngModel name="userName" />
-      <input type="email" placeholder="Email" required ngModel name="email" />
-      <input type="password" placeholder="Mật khẩu" required ngModel name="password" />
-      <a href="#">Quên mật khẩu?</a>
+      <input type="text" placeholder="First Name" required ngModel name="firstName" style="border-radius: 10px"/>
+      <input type="text" placeholder="Last Name" required ngModel name="lastName" style="border-radius: 10px"/>
+      <input type="text" placeholder="User Name" required ngModel name="userName" style="border-radius: 10px"/>
+      <input type="email" placeholder="Email" required ngModel name="email" style="border-radius: 10px"/>
+      <input type="password" placeholder="Mật khẩu" required ngModel name="password" style="border-radius: 10px"/>
       <input class="form-submit" type="submit" value="Đăng ký" />
     </form>
   </div>

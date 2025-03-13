@@ -1,74 +1,247 @@
 <main>
-  <app-header/>
+<!--  <app-header/>-->
   <app-sidebar/>
-  @if (account) {
-    <section>
-        <div class="profile-container">
-          <div>
-            <img #profilePic [src]="profilePicture || 'assets/default-profile.png'"
-                 alt="Profile Picture" role="button"
-                 title="Edit Profile Picture"
-                 (click)="modalVisible = !modalVisible" />
-            <strong>{{ account.firstName }} {{ account.lastName }}</strong>
-            <p><i class="fa-solid fa-user"></i> {{ account.username }}</p>  <!-- Icon cho Username -->
-            <p><i class="fa fa-envelope"></i> {{ account.email }}</p>      <!-- Icon cho Email -->
-            <p><i class="fa-solid fa-user-tag"></i> {{ account.firstName }}</p>  <!-- Icon cho First Name -->
-            <p><i class="fa-solid fa-user-tag"></i> {{ account.lastName }}</p>   <!-- Icon cho Last Name -->
+
+  @if (isLoading) {
+    <section class="loading-section">
+      <div class="loading-spinner">
+        <div class="spinner"></div>
+        <p>Đang tải thông tin người dùng...</p>
+      </div>
+    </section>
+  } @else if (account) {
+    <section class="profile-section">
+      <!-- Profile Sidebar -->
+      <div class="profile-sidebar">
+        <div class="profile-header">
+          <div class="profile-avatar-container">
+            <img
+              [src]="profilePicture || 'assets/nguoiDep.png'"
+              alt="Profile Picture"
+              class="profile-avatar"
+            />
+            <button class="edit-avatar-btn" (click)="openFileSelector()">
+              <i class="fa-solid fa-camera"></i>
+            </button>
           </div>
-          <div>
-            <h2>About</h2>
-            <p>{{ account.firstName }} {{ account.lastName }} is a valued user of our platform.</p>
+          <h2 class="profile-name">{{ account.firstName }} {{ account.lastName }}</h2>
+          <p class="profile-username">{{ account.username }}</p>
+        </div>
+
+        <div class="profile-info">
+          <div class="info-item">
+            <i class="fa-solid fa-envelope info-icon"></i>
+            <div class="info-content">
+              <span class="info-label">Email</span>
+              <span class="info-value">{{ account.email }}</span>
+            </div>
+          </div>
+
+          <div class="info-item">
+            <i class="fa-solid fa-user info-icon"></i>
+            <div class="info-content">
+              <span class="info-label">Tên đầy đủ</span>
+              <span class="info-value">{{ account.firstName }} {{ account.lastName }}</span>
+            </div>
+          </div>
+
+          <div class="info-item">
+            <i class="fa-solid fa-shield-halved info-icon"></i>
+            <div class="info-content">
+              <span class="info-label">Vai trò</span>
+              <span class="info-value">Sói tiệc tùng</span>
+            </div>
           </div>
         </div>
-        <div class="form-container">
-          <form method="post" (submit)="onUpdate()">
-            <h2>Personal Details</h2>
-            <div class="personal-details">
-              <div class="form-group">
-                <label>First Name</label>
-                <input type="text" [(ngModel)]="tempAccount.firstName" name="firstName" required />
-              </div>
-              <div class="form-group">
-                <label>Last Name</label>
-                <input type="text" [(ngModel)]="tempAccount.lastName" name="lastName" required />
-              </div>
-              <div class="form-group">
-                <label>Email</label>
-                <input type="text" [(ngModel)]="tempAccount.email" name="email" required />
-              </div>
-            </div>
-            <h2>Address</h2>
-            <div class="address-details">
-              <div class="form-group">
-                <label>City</label>
-                <input type="text" placeholder="bbsr" name="city" />
-              </div>
-              <div class="form-group">
-                <label>State</label>
-                <input type="text" placeholder="odisha" name="state" />
-              </div>
-              <div class="form-group">
-                <label>Country</label>
-                <input type="text" placeholder="india" name="country" />
-              </div>
-              <div class="form-group">
-                <label>Zip Code</label>
-                <input type="text" placeholder="123456" name="zipcode" />
-              </div>
-            </div>
-            <div class="button-group">
-              <button type="submit">Update</button>
-            </div>
-          </form>
+
+        <div class="profile-about">
+          <h3>Giới thiệu</h3>
+          <p>{{ account.firstName }} {{ account.lastName }} là thành viên quý giá của nền tảng chúng tôi.</p>
         </div>
-      </section>
-  }
-  @if (!account) {
-    <div>Loading User...</div>
+      </div>
+
+      <!-- Profile Content -->
+      <div class="profile-content">
+        <div class="content-header">
+          <h1>Thông tin cá nhân</h1>
+          <p>Quản lý thông tin cá nhân của bạn</p>
+        </div>
+
+        <div class="tab-navigation">
+          <button
+            class="tab-button"
+            [class.active]="activeTab === 'personal'"
+            (click)="setActiveTab('personal')"
+          >
+            <i class="fa-solid fa-user"></i> Thông tin cá nhân
+          </button>
+          <button
+            class="tab-button"
+            [class.active]="activeTab === 'address'"
+            (click)="setActiveTab('address')"
+          >
+            <i class="fa-solid fa-location-dot"></i> Địa chỉ
+          </button>
+        </div>
+
+        <form (submit)="onUpdate()" class="profile-form">
+          <!-- Personal Details Tab -->
+          <div class="form-section" [class.active]="activeTab === 'personal'">
+            <h2 class="section-title">Thông tin cá nhân</h2>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label for="firstName">Tên</label>
+                <div class="input-container">
+                  <i class="fa-solid fa-user input-icon"></i>
+                  <input
+                    type="text"
+                    id="firstName"
+                    [(ngModel)]="tempAccount.firstName"
+                    name="firstName"
+                    required
+                    placeholder="Nhập tên của bạn"
+                  />
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="lastName">Họ</label>
+                <div class="input-container">
+                  <i class="fa-solid fa-user input-icon"></i>
+                  <input
+                    type="text"
+                    id="lastName"
+                    [(ngModel)]="tempAccount.lastName"
+                    name="lastName"
+                    required
+                    placeholder="Nhập họ của bạn"
+                  />
+                </div>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="email">Email</label>
+              <div class="input-container">
+                <i class="fa-solid fa-envelope input-icon"></i>
+                <input
+                  type="email"
+                  id="email"
+                  [(ngModel)]="tempAccount.email"
+                  name="email"
+                  required
+                  placeholder="Nhập email của bạn"
+                />
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="username">Tên người dùng</label>
+              <div class="input-container">
+                <i class="fa-solid fa-at input-icon"></i>
+                <input
+                  type="text"
+                  id="username"
+                  [(ngModel)]="tempAccount.username"
+                  name="username"
+                  required
+                  placeholder="Nhập tên người dùng của bạn"
+                  disabled
+                />
+              </div>
+              <small class="input-help">Tên người dùng không thể thay đổi</small>
+            </div>
+          </div>
+
+          <!-- Address Tab -->
+          <div class="form-section" [class.active]="activeTab === 'address'">
+            <h2 class="section-title">Địa chỉ</h2>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label for="city">Thành phố</label>
+                <div class="input-container">
+                  <i class="fa-solid fa-city input-icon"></i>
+                  <input
+                    type="text"
+                    id="city"
+                    [(ngModel)]="address.city"
+                    name="city"
+                    placeholder="Nhập thành phố của bạn"
+                  />
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="state">Tỉnh/Thành</label>
+                <div class="input-container">
+                  <i class="fa-solid fa-map input-icon"></i>
+                  <input
+                    type="text"
+                    id="state"
+                    [(ngModel)]="address.state"
+                    name="state"
+                    placeholder="Nhập tỉnh/thành của bạn"
+                  />
+                </div>
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label for="country">Quốc gia</label>
+                <div class="input-container">
+                  <i class="fa-solid fa-globe input-icon"></i>
+                  <input
+                    type="text"
+                    id="country"
+                    [(ngModel)]="address.country"
+                    name="country"
+                    placeholder="Nhập quốc gia của bạn"
+                  />
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="zipcode">Mã bưu điện</label>
+                <div class="input-container">
+                  <i class="fa-solid fa-location-dot input-icon"></i>
+                  <input
+                    type="text"
+                    id="zipcode"
+                    [(ngModel)]="address.zipcode"
+                    name="zipcode"
+                    placeholder="Nhập mã bưu điện của bạn"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-actions">
+            <button type="submit" class="save-button" [disabled]="isSaving">
+              <i class="fa-solid fa-save"></i>
+              {{ isSaving ? 'Đang lưu...' : 'Lưu thay đổi' }}
+            </button>
+            <button type="button" class="cancel-button">Hủy</button>
+          </div>
+        </form>
+      </div>
+    </section>
+  } @else {
+    <section class="error-section">
+      <div class="error-container">
+        <i class="fa-solid fa-circle-exclamation error-icon"></i>
+        <h2>Không thể tải thông tin người dùng</h2>
+        <p>Đã xảy ra lỗi khi tải thông tin người dùng. Vui lòng thử lại sau.</p>
+        <button class="retry-button" (click)="loadUserProfile()">Thử lại</button>
+      </div>
+    </section>
   }
 </main>
 
- @if (toastVisible) {
+@if (toastVisible) {
   <app-toast [heading]="toastHeading" [description]="toastDescription">
   </app-toast>
 }

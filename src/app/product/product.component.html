@@ -1,82 +1,109 @@
 <main>
-  <app-header />
   <app-sidebar />
   <section>
-
-    <!-- banner -->
-    <div
-      style="background-image: url(../../assets/img/demonFruit.jpg);  border-radius: 10px;
-       background-position: center; background-size: cover; width: 100%; height: 60vh; filter: brightness(0.3);">
-    </div>
-
-    <!-- name brand -->
-    <div class="name__brand">
-      <div class="showtotop" style="font-size: 50px; font-weight: 900; color:#fff ;background: transparent">
-        Specialties</div>
-      <ul class="breadcrumb">
-        <li class="breadcrumb__item"><a href="./index.html">Trang chủ</a> <i
-          class="fa-solid fa-chevron-right"></i> </li>
-        <li class="breadcrumb__item">Menu<i class="fa-solid fa-chevron-right"></i></li>
-      </ul>
-    </div>
-
-    <!-- Banner và các phần khác -->
-    <div class="item dish my-3">
-      <div class="container">
-        <!-- Nav và các phần khác -->
-        <button class="floating-cart-button" (click)="toggleCart()">
-          <i class="fas fa-shopping-cart"></i>
-        </button>
-        <nz-select class="mb-3 mx-3" nzShowSearch nzAllowClear nzPlaceHolder="Tìm danh mục sản phẩm">
-          <nz-option nzLabel="Jack" nzValue="jack"></nz-option>
-          <nz-option nzLabel="Lucy" nzValue="lucy"></nz-option>
-          <nz-option nzLabel="Tom" nzValue="tom"></nz-option>
-        </nz-select>
-
-        <nz-select class="mb-3 mx-3" nzShowSearch nzAllowClear nzPlaceHolder="Giá">
-          <nz-option nzLabel="Từ cao đến thấp" nzValue="hight"></nz-option>
-          <nz-option nzLabel="Từ thấp đến cao" nzValue="low"></nz-option>
-        </nz-select>
-
-        <div class="row g-0 menu__item active">
-            @if (loading) {
-              <div>Đang tải dữ liệu...</div>
-            }
-            @if (products.length > 0) {
-              @for (product of products; track product.id) {
-                <div class="col-md-6">
-                  <div class="row g-0 dish__item showtotop dl-02">
-                    <div class="col-md-12 col-lg-6">
-                      <img
-                        class="dish__img"
-                        [src]="'https://drive.google.com/thumbnail?id=' + getImageId(product.image)"
-                        alt="{{ product.name }}"
-                      />
-                    </div>
-                    <div class="col-md-12 col-lg-6 dish__desc">
-                      <div class="row g-0">
-                        <div class="col-8">
-                          <h3 class="dish__name">{{ product.name }}</h3>
-                        </div>
-                        <div class="col" style="text-align: right;">
-                          <span class="dish__price mx-5">{{ product.price }} VND</span>
-                        </div>
-                      </div>
-                      <p class="dish__prameter text">{{ product.description }}</p>
-                      <button (click)="openOrderModal(product)" class="btn btn-warning mx-3">Đặt hàng</button>
-                      <button (click)="openCartModal(product)" class="btn btn-danger my-5">Thêm vào giỏ</button>
-                    </div>
-                  </div>
-                </div>
-              }
-            } @else {
-              <div class="text-center py-5">
-                <p>Không có sản phẩm nào.</p>
-              </div>
-            }
-        </div>
+    <!-- Hero Banner -->
+    <div class="hero-banner">
+      <div class="hero-image" style="background-image: url(../../assets/img/demonFruit.jpg);"></div>
+      <div class="hero-overlay"></div>
+      <div class="hero-content">
+        <h1 class="hero-title showtotop">Specialties</h1>
+        <ul class="breadcrumb showtotop">
+          <li class="breadcrumb__item">
+            <a href="./index.html">Trang chủ</a>
+            <i class="fa-solid fa-chevron-right"></i>
+          </li>
+          <li class="breadcrumb__item">
+            Menu
+            <i class="fa-solid fa-chevron-right"></i>
+          </li>
+        </ul>
       </div>
     </div>
+
+    <!-- Menu Content -->
+    <div class="menu-container">
+      <div class="filter-bar">
+        <div class="filter-title">
+          <h2>Thực đơn của chúng tôi</h2>
+        </div>
+        <div class="filter-controls">
+          <nz-select class="category-filter" nzShowSearch nzAllowClear nzPlaceHolder="Tìm danh mục sản phẩm">
+            <nz-option nzLabel="Tất cả" nzValue="all"></nz-option>
+            <nz-option nzLabel="Món chính" nzValue="main"></nz-option>
+            <nz-option nzLabel="Món tráng miệng" nzValue="dessert"></nz-option>
+            <nz-option nzLabel="Đồ uống" nzValue="drinks"></nz-option>
+          </nz-select>
+
+          <nz-select class="price-filter" nzShowSearch nzAllowClear nzPlaceHolder="Giá">
+            <nz-option nzLabel="Từ cao đến thấp" nzValue="high"></nz-option>
+            <nz-option nzLabel="Từ thấp đến cao" nzValue="low"></nz-option>
+          </nz-select>
+        </div>
+      </div>
+
+      <!-- Products Grid -->
+      <div class="products-container">
+        @if (loading) {
+          <div class="loading-container">
+            @for (i of [1, 2, 3, 4]; track i) {
+              <div class="product-skeleton">
+                <nz-skeleton [nzActive]="true" [nzAvatar]="{ size: 'large' }" [nzParagraph]="{ rows: 3 }"></nz-skeleton>
+              </div>
+            }
+          </div>
+        } @else if (products.length > 0) {
+          <div class="products-grid">
+            @for (product of products; track product.id) {
+              <div class="product-card showtotop">
+                <div class="product-image">
+                  <img
+                    [src]="'https://drive.google.com/thumbnail?id=' + getImageId(product.image)"
+                    alt="{{ product.name }}"
+                    loading="lazy"
+                  />
+                  <div class="product-actions">
+                    <button class="action-button view-button" (click)="openOrderModal(product)">
+                      <i class="fa-solid fa-eye"></i>
+                    </button>
+                    <button class="action-button cart-button" (click)="openCartModal(product)">
+                      <i class="fa-solid fa-cart-plus"></i>
+                    </button>
+                  </div>
+                </div>
+                <div class="product-details">
+                  <div class="product-header">
+                    <h3 class="product-name">{{ product.name }}</h3>
+                    <span class="product-price">{{ formatPrice(product.price) }} VND</span>
+                  </div>
+                  <p class="product-description">{{ product.description }}</p>
+                  <div class="product-buttons">
+                    <button class="order-button" (click)="openOrderModal(product)">
+                      Đặt hàng
+                    </button>
+                    <button class="cart-button" (click)="openCartModal(product)">
+                      Thêm vào giỏ
+                    </button>
+                  </div>
+                </div>
+              </div>
+            }
+          </div>
+        } @else {
+          <div class="empty-state">
+            <i class="fa-solid fa-utensils empty-icon"></i>
+            <p>Không có sản phẩm nào.</p>
+          </div>
+        }
+      </div>
+    </div>
+
+    <!-- Floating Cart Button with Badge -->
+    <button class="floating-cart-button" (click)="toggleCart()">
+      <i class="fas fa-shopping-cart"></i>
+      @if (cartItemCount > 0) {
+        <span class="cart-badge">{{ cartItemCount }}</span>
+      }
+    </button>
   </section>
 
   <!-- Modal chi tiết sản phẩm -->
@@ -88,20 +115,18 @@
     />
   }
 
-  @if (isCartVisible){
-    <app-cart [isOpen]="isCartVisible" (closeEvent)="toggleCart()"/>
+  @if (isCartVisible) {
+    <app-cart
+      [isOpen]="isCartVisible"
+      (closeEvent)="toggleCart()"
+    />
   }
-
-<!--  @if (modalVisible && selectedProduct && modalType === 'cart') {-->
-<!--    <app-cart-item-->
-<!--      [product]="selectedProduct"-->
-<!--      (closeModal)="closeCartModal()"-->
-<!--      (placeOrder)="onPlaceCart($event)"-->
-<!--    />-->
-<!--  }-->
-
 </main>
+
 @if (toastVisible) {
-  <app-toast [heading]="toastHeading" [description]="toastDescription">
-  </app-toast>
+  <app-toast
+    [heading]="toastHeading"
+    [description]="toastDescription"
+  />
 }
+

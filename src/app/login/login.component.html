@@ -1,4 +1,5 @@
-<div >
+<div class="three-js-background" #container></div>  <!-- Container cho Three.js -->
+<div class="login-wrapper">
   <div class="container" id="container">
     <div class="form-container sign-in-container">
       <form method="post" #signinForm="ngForm" (ngSubmit)="onLogin(signinForm)">
@@ -14,12 +15,14 @@
           name="username"
           placeholder="Tên người dùng"
           required ngModel
+          style="border-radius: 10px"
         />
         <input
           type="password"
           name="password"
           placeholder="Mật khẩu"
           required ngModel
+          style="border-radius: 10px"
         />
         <a href="#">Quên mật khẩu?</a>
         <input type="submit" value="Đăng nhập" class="form-submit" />

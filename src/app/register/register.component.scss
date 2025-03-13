@@ -174,7 +174,7 @@ input {
 .overlay {
   background: #FF416C;
   background: -webkit-linear-gradient(to right, #FF4B2B, #FF416C);
-  background: linear-gradient(to right, #2d0f4f, #8623a3);
+  background: linear-gradient(to right, #1d3512, #e49638);
   background-repeat: no-repeat;
   background-size: cover;
   background-position: 0 0;
@@ -251,8 +251,9 @@ footer {
 }
 
 .form-submit {
+  margin-bottom:5px ;
   color: white;
-  background-color: #2d0f4f;
+  background-color: #ffa80d;
   border-radius: 20px;
   padding: 10px 20px;
   border: none;

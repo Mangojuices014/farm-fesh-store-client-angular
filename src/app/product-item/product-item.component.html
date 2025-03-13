@@ -1,30 +1,149 @@
 @if (product) {
-  <div class="detail-product-modal">
-    <div class="modal-content">
-      <span class="close" (click)="onCloseModal()">&times;</span>
-      <h2>{{ product.name }}</h2>
-      @if (product.image) {
-        <img [src]="'https://drive.google.com/thumbnail?id=' + getImageId(product.image)" [alt]="product.name"
-             style="height: 150px; object-fit: cover;"
-        />
-      }
-      <p class="product-name-highlight">{{ product.description }}</p>
-      <p><strong>Giá:</strong> {{ product.price }}</p>
-      <p><strong>Số lượng còn lại:</strong> {{ product.quantityProduct }}</p>
-      <label for="quantity"><strong>Số lượng:</strong></label>
-      <input
-        type="number"
-        id="quantity"
-        [(ngModel)]="quantity"
-        min="1"
-      />
-      <button (click)="onPlaceOrder()" class="btn btn-warning" [disabled]="loading">
-        @if (loading) {
-          Đang đặt hàng...
-        } @else {
-          Đặt hàng
-        }
+  <div class="product-modal-overlay" (click)="onCloseModal()">
+    <div class="product-modal" (click)="$event.stopPropagation()">
+      <button class="close-button" (click)="onCloseModal()">
+        <i class="fa-solid fa-xmark"></i>
       </button>
+
+      <div class="product-modal-content">
+        <div class="product-image-gallery">
+          @if (product.image) {
+            <img
+              [src]="'https://drive.google.com/thumbnail?id=' + getImageId(product.image)"
+              [alt]="product.name"
+              class="product-image"
+            />
+            <div class="product-badge">
+              <span>Feliciano</span>
+            </div>
+          } @else {
+            <div class="placeholder-image">
+              <i class="fa-solid fa-utensils"></i>
+            </div>
+          }
+        </div>
+
+        <div class="product-info">
+          <h2 class="product-title">{{ product.name }}</h2>
+
+          <div class="product-meta">
+            <span class="product-price">{{ formatPrice(product.price) }} ₫</span>
+            <div class="product-availability" [class.low-stock]="product.quantityProduct && product.quantityProduct < 5">
+              <i class="fa-solid" [class.fa-check-circle]="product.quantityProduct && product.quantityProduct > 0" [class.fa-times-circle]="!product.quantityProduct || product.quantityProduct === 0"></i>
+              <span>{{ product.quantityProduct && product.quantityProduct > 0 ? 'Còn hàng' : 'Hết hàng' }}</span>
+              @if (product.quantityProduct && product.quantityProduct > 0) {
+                <span class="stock-count">({{ product.quantityProduct }} món)</span>
+              }
+            </div>
+          </div>
+
+          <div class="product-tabs">
+            <button
+              class="tab-button"
+              [class.active]="activeTab === 'details'"
+              (click)="setActiveTab('details')"
+            >
+              <i class="fa-solid fa-info-circle"></i> Chi tiết
+            </button>
+            <button
+              class="tab-button"
+              [class.active]="activeTab === 'nutrition'"
+              (click)="setActiveTab('nutrition')"
+            >
+              <i class="fa-solid fa-leaf"></i> Dinh dưỡng
+            </button>
+          </div>
+
+          <div class="tab-content">
+            <div class="tab-pane" [class.active]="activeTab === 'details'">
+              <div class="product-description">
+                <p>{{ product.description }}</p>
+              </div>
+            </div>
+
+            <div class="tab-pane" [class.active]="activeTab === 'nutrition'">
+              <div class="nutrition-info">
+                <div class="nutrition-item">
+                  <span class="nutrition-label">Calories</span>
+                  <span class="nutrition-value">320 kcal</span>
+                </div>
+                <div class="nutrition-item">
+                  <span class="nutrition-label">Protein</span>
+                  <span class="nutrition-value">18g</span>
+                </div>
+                <div class="nutrition-item">
+                  <span class="nutrition-label">Carbs</span>
+                  <span class="nutrition-value">42g</span>
+                </div>
+                <div class="nutrition-item">
+                  <span class="nutrition-label">Fat</span>
+                  <span class="nutrition-value">12g</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="order-options">
+            <div class="quantity-selector">
+              <label for="quantity">Số lượng:</label>
+              <div class="quantity-controls">
+                <button
+                  class="quantity-btn"
+                  (click)="decreaseQuantity()"
+                  [disabled]="quantity <= 1"
+                >
+                  <i class="fa-solid fa-minus"></i>
+                </button>
+                <input
+                  type="number"
+                  id="quantity"
+                  [(ngModel)]="quantity"
+                  min="1"
+                  [max]="product.quantityProduct || 10"
+                />
+                <button
+                  class="quantity-btn"
+                  (click)="increaseQuantity()"
+                  [disabled]="product.quantityProduct && quantity >= product.quantityProduct"
+                >
+                  <i class="fa-solid fa-plus"></i>
+                </button>
+              </div>
+            </div>
+
+            <div class="special-instructions">
+              <label for="instructions">Yêu cầu đặc biệt:</label>
+              <textarea
+                id="instructions"
+                [(ngModel)]="specialInstructions"
+                placeholder="Ghi chú về món ăn hoặc dị ứng..."
+                rows="2"
+              ></textarea>
+            </div>
+          </div>
+
+          <div class="order-summary">
+            <div class="summary-row">
+              <span>Tổng cộng:</span>
+              <span class="summary-price">{{ formatPrice(product.price * quantity) }} ₫</span>
+            </div>
+          </div>
+
+          <div class="action-buttons">
+            <button
+              class="order-now-btn"
+              (click)="onPlaceOrder()"
+              [disabled]="loading || !product.quantityProduct || product.quantityProduct === 0"
+            >
+              @if (loading) {
+                <i class="fa-solid fa-spinner fa-spin"></i> Đang xử lý...
+              } @else {
+                <i class="fa-solid fa-utensils"></i> Đặt hàng ngay
+              }
+            </button>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 }
@@ -33,3 +152,4 @@
   <app-toast [heading]="toastHeading" [description]="toastDescription">
   </app-toast>
 }
+

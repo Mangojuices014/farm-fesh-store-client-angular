@@ -1,89 +1,108 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
-import {FormsModule, NgForm} from "@angular/forms";
-import {Product} from "../model/Product";
-import {ToastComponent} from "../toast/toast.component";
-import {OrderService} from "../services/product/order.service";
+import { Component, EventEmitter, Input, Output } from "@angular/core"
+import { FormsModule } from "@angular/forms"
+import  { Product } from "../model/Product"
+import { ToastComponent } from "../toast/toast.component"
+import  { OrderService } from "../services/product/order.service"
+import { CommonModule } from "@angular/common"
 
 @Component({
-  selector: 'app-product-item',
+  selector: "app-product-item",
   standalone: true,
-  imports: [
-    FormsModule,ToastComponent
-  ],
-  templateUrl: './product-item.component.html',
-  styleUrls: ['./product-item.component.scss'] // ✅ Sửa styleUrl thành styleUrls
+  imports: [CommonModule, FormsModule, ToastComponent],
+  templateUrl: "./product-item.component.html",
+  styleUrls: ["./product-item.component.scss"],
 })
 export class ProductItemComponent {
-  modalVisible = false;
-  loading = false;
-  toastHeading = ""; toastDescription = ""; toastVisible = false;
-  @Input() product: Product | null = null; // Nhận dữ liệu sản phẩm từ component cha
-  @Output() closeModal = new EventEmitter<void>(); // Sự kiện đóng modal
-  @Output() placeOrder = new EventEmitter<{ product: Product, quantity: number }>(); // Sự kiện đặt hàng
+  modalVisible = false
+  loading = false
+  toastHeading = ""
+  toastDescription = ""
+  toastVisible = false
+  specialInstructions = ""
+  activeTab = "details" // 'details' or 'nutrition'
 
-  quantity: number = 1; // Số lượng mặc định
+  @Input() product: Product | null = null
+  @Output() closeModal = new EventEmitter<void>()
+  @Output() placeOrder = new EventEmitter<{ product: Product; quantity: number }>()
 
-  constructor(private orderService: OrderService) {} // 🔹 Inject OrderService
+  quantity = 1
 
+  constructor(private orderService: OrderService) {}
 
-  // Đóng modal
   onCloseModal(): void {
-    this.closeModal.emit();
+    this.closeModal.emit()
   }
 
-  // Xử lý đặt hàng
   onPlaceOrder(): void {
-    if (!this.product) return;
+    if (!this.product) return
 
     if (this.quantity <= 0 || this.quantity > (this.product.quantityProduct || 0)) {
-      this.generateToast("Thất bại", "Số lượng không hợp lệ hoặc không đủ hàng.");
-      return;
+      this.generateToast("Thất bại", "Số lượng không hợp lệ hoặc không đủ hàng.")
+      return
     }
 
     const orderData = {
       order_details: [
         {
           quantityOrder: this.quantity,
-          product_id: this.product.id
-        }
-      ]
-    };
+          product_id: this.product.id,
+        },
+      ],
+    }
 
-    console.log("🛒 Dữ liệu gửi lên API:", JSON.stringify(orderData)); // Debug
+    console.log("🛒 Dữ liệu gửi lên API:", JSON.stringify(orderData))
 
-    this.loading = true;
+    this.loading = true
     this.orderService.createOrder(orderData).subscribe({
       next: (res) => {
-        console.log("✅ Phản hồi từ API:", res);
-        this.generateToast("Thành công", "Đơn hàng đã được tạo.");
-        this.placeOrder.emit({ product: this.product!, quantity: this.quantity });
-        this.onCloseModal();
+        console.log("✅ Phản hồi từ API:", res)
+        this.generateToast("Thành công", "Đơn hàng đã được tạo thành công.")
+        this.placeOrder.emit({ product: this.product!, quantity: this.quantity })
+        this.onCloseModal()
       },
       error: (err) => {
-        console.error("❌ Lỗi API:", err);
-        this.generateToast("Thất bại", "Bạn vẫn chưa đăng nhập hoặc dữ liệu sai.");
-        this.loading = false;
+        console.error("❌ Lỗi API:", err)
+        this.generateToast("Thất bại", "Bạn vẫn chưa đăng nhập hoặc dữ liệu sai.")
+        this.loading = false
       },
       complete: () => {
-        this.loading = false;
-      }
-    });
+        this.loading = false
+      },
+    })
   }
 
-
-  // Lấy ID hình ảnh từ URL Google Drive
   getImageId(imageUrl: string): string {
-    const match = imageUrl.match(/\/d\/(.*?)\//);
-    return match ? match[1] : '';
+    const match = imageUrl.match(/\/d\/(.*?)\//)
+    return match ? match[1] : ""
   }
 
+  formatPrice(price: number): string {
+    return new Intl.NumberFormat("vi-VN").format(price)
+  }
+
+  increaseQuantity(): void {
+    if (this.product && this.quantity < (this.product.quantityProduct || 10)) {
+      this.quantity++
+    }
+  }
+
+  decreaseQuantity(): void {
+    if (this.quantity > 1) {
+      this.quantity--
+    }
+  }
+
+  setActiveTab(tab: string): void {
+    this.activeTab = tab
+  }
 
   generateToast(heading: string, description: string) {
-    this.toastHeading = heading;
-    this.toastDescription = description;
-    this.toastVisible = true;
+    this.toastHeading = heading
+    this.toastDescription = description
+    this.toastVisible = true
     setTimeout(() => {
-      this.toastVisible = false;
-    }, 5000);
+      this.toastVisible = false
+    }, 5000)
   }
 }
+

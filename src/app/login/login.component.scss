@@ -98,7 +98,7 @@ body {
   align-items: center;
   flex-direction: column;
   font-family: 'Montserrat', sans-serif;
-  height: 100vh;
+  height: 80vh;
   margin: -20px 0 50px;
 }
 
@@ -191,6 +191,15 @@ form {
     box-shadow: 0 0 0 3px rgba(255, 75, 43, 0.5); /* Thêm viền màu */
   }
 }
+.three-js-background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+}
+
 .social-container a {
   border: 1px solid #DDDDDD;
   border-radius: 50%;

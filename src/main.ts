@@ -15,6 +15,8 @@ import en from '@angular/common/locales/en';
 import { FormsModule } from '@angular/forms';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import {CartComponent} from "./app/cart/cart.component";
+import {ApprovalComponent} from "./app/approval/approval.component";
+import {OTPComponent} from "./app/otp/otp.component";
 
 registerLocaleData(en);
 const routes: Routes = [
@@ -24,6 +26,8 @@ const routes: Routes = [
   { path: 'products', component: ProductComponent},
   { path: 'process', component: TaskComponent},
   { path: 'cart', component: CartComponent},
+  { path: 'approval', component: ApprovalComponent},
+  { path: 'otp', component: OTPComponent},
   { path: '', redirectTo: '/login', pathMatch: 'full' }
 ];
 

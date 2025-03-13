@@ -1,0 +1,20 @@
+<div class="three-js-background" #container></div> <!-- Container cho Three.js -->
+<div class="otp-wrapper">
+  <div class="container" id="container">
+    <div class="form-container otp-container">
+      <form (submit)="$event.preventDefault(); verifyOTP()">
+        <h1>Xác nhận OTP</h1>
+        <p>Nhập mã OTP đã được gửi đến số điện thoại của bạn</p>
+        <div class="input-field">
+          <input type="number" #otpInput [(ngModel)]="otpValues[0]" [ngModelOptions]="{standalone: true}" (keyup)="onKeyUp($event, 0)" />
+          <input type="number" #otpInput [(ngModel)]="otpValues[1]" [ngModelOptions]="{standalone: true}" (keyup)="onKeyUp($event, 1)" disabled />
+          <input type="number" #otpInput [(ngModel)]="otpValues[2]" [ngModelOptions]="{standalone: true}" (keyup)="onKeyUp($event, 2)" disabled />
+          <input type="number" #otpInput [(ngModel)]="otpValues[3]" [ngModelOptions]="{standalone: true}" (keyup)="onKeyUp($event, 3)" disabled />
+          <input type="number" #otpInput [(ngModel)]="otpValues[4]" [ngModelOptions]="{standalone: true}" (keyup)="onKeyUp($event, 4)" disabled />
+          <input type="number" #otpInput [(ngModel)]="otpValues[5]" [ngModelOptions]="{standalone: true}" (keyup)="onKeyUp($event, 5)" disabled />
+        </div>
+        <button [class.active]="isButtonActive" type="submit">Xác nhận OTP</button>
+      </form>
+    </div>
+  </div>
+</div>

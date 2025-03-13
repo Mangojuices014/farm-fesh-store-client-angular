@@ -237,7 +237,14 @@ input {
   height: 40px;
   width: 40px;
 }
-
+.three-js-background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+}
 footer {
   background-color: #222;
   color: #fff;

@@ -1,30 +1,85 @@
-<!--@if (product) {-->
-<!--  <div class="detail-product-modal">-->
-<!--    <div class="modal-content">-->
-<!--      <span class="close" (click)="onCloseModal()">&times;</span>-->
-<!--      <h2 style="font-weight: bold">{{ product.name }}</h2>-->
-<!--      @if (product.image) {-->
-<!--        <img [src]="'https://drive.google.com/thumbnail?id=' + getImageId(product.image)" [alt]="product.name"-->
-<!--             style="height: 150px; object-fit: cover;"-->
-<!--        />-->
-<!--      }-->
-<!--      <p class="product-name-highlight">{{ product.description }}</p>-->
-<!--      <p><strong>Giá:</strong> {{ product.price }}</p>-->
-<!--      <p><strong>Số lượng còn lại:</strong> {{ product.quantityProduct }}</p>-->
-<!--      <label for="quantity"><strong>Số lượng:</strong></label>-->
-<!--      <input-->
-<!--        type="number"-->
-<!--        id="quantity"-->
-<!--        [(ngModel)]="quantity"-->
-<!--        min="1"-->
-<!--      />-->
-<!--      <button (click)="onPlaceCart()" class="btn btn-danger" [disabled]="loading">-->
-<!--        @if (loading) { Đang thêm vào giỏ hàng... } @else {Thêm vào giỏ hàng }-->
-<!--      </button></div>-->
-<!--  </div>-->
-<!--}-->
+@if (product) {
+  <div class="product-modal-overlay" (click)="onCloseModal()">
+    <div class="product-modal" (click)="$event.stopPropagation()">
+      <button class="close-button" (click)="onCloseModal()">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
 
-<!--@if (toastVisible) {-->
-<!--  <app-toast [heading]="toastHeading" [description]="toastDescription">-->
-<!--  </app-toast>-->
-<!--}-->
+      <div class="product-modal-content">
+        <div class="product-image-gallery">
+          @if (product.image) {
+            <img
+              [src]="'https://drive.google.com/thumbnail?id=' + getImageId(product.image)"
+              [alt]="product.name"
+              class="product-image"
+            />
+          } @else {
+            <div class="placeholder-image">
+              <i class="fa-solid fa-utensils"></i>
+            </div>
+          }
+        </div>
+
+        <div class="product-info">
+          <h2 class="product-title">{{ product.name }}</h2>
+
+          <div class="product-meta">
+            <span class="product-price">{{ formatPrice(product.price) }} VNĐ</span>
+            <div class="product-availability" [class.low-stock]="product.quantityProduct && product.quantityProduct < 5">
+              <i class="fa-solid" [class.fa-check-circle]="product.quantityProduct && product.quantityProduct > 0" [class.fa-times-circle]="!product.quantityProduct || product.quantityProduct === 0"></i>
+              <span>{{ product.quantityProduct && product.quantityProduct > 0 ? 'Còn hàng' : 'Hết hàng' }}</span>
+              @if (product.quantityProduct && product.quantityProduct > 0) {
+                <span class="stock-count">({{ product.quantityProduct }} món)</span>
+              }
+            </div>
+          </div>
+
+          <div class="product-tabs">
+            <button class="tab-button">
+              <i class="fa-solid fa-info-circle"></i> Chi tiết
+            </button>
+          </div>
+
+          <div class="order-options">
+            <div class="quantity-selector">
+              <div class="product-description mb-3">
+                <p>{{ product.description }}</p>
+              </div>
+              <label for="quantity">Số lượng:</label>
+              <div class="quantity-controls">
+                <button class="quantity-btn" (click)="decreaseQuantity()" [disabled]="quantity <= 1">
+                  <i class="fa-solid fa-minus"></i>
+                </button>
+                <input type="number" id="quantity" [(ngModel)]="quantity" min="1" [max]="product.quantityProduct || 10" />
+                <button class="quantity-btn" (click)="increaseQuantity()" [disabled]="product.quantityProduct && quantity >= product.quantityProduct">
+                  <i class="fa-solid fa-plus"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div class="order-summary">
+            <div class="summary-row">
+              <span>Tổng cộng:</span>
+              <span class="summary-price">{{formatPrice(product.price * quantity) }} ₫</span>
+            </div>
+          </div>
+
+          <div class="action-buttons">
+            <button class="order-now-btn" (click)="onPlaceCart()" [disabled]="loading || !product.quantityProduct || product.quantityProduct === 0">
+              @if (loading) {
+                <i class="fa-solid fa-spinner fa-spin"></i> Đang xử lý...
+              } @else {
+                <i class="fa-solid fa-utensils"></i> Thêm vào giỏ hàng
+              }
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+}
+
+@if (toastVisible) {
+  <app-toast [heading]="toastHeading" [description]="toastDescription"></app-toast>
+}

@@ -6,11 +6,8 @@ export interface Product {
   price: number;
   quantityProduct: number;
   image: string;
-  active: boolean;
-  material: string;
-  sizeWeight: string;
+  origin: string;
+  harvestDate: string;
+  shelfLife: number;
   weight: number;
-  length: number;
-  width: number;
-  height: number;
 }

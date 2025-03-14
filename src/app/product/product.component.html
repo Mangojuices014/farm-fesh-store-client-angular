@@ -77,11 +77,8 @@
                   </div>
                   <p class="product-description">{{ product.description }}</p>
                   <div class="product-buttons">
-                    <button class="order-button" (click)="openOrderModal(product)">
+                    <button style="border-radius: 20px" class="order-button" (click)="openOrderModal(product)">
                       Đặt hàng
-                    </button>
-                    <button class="cart-button" (click)="openCartModal(product)">
-                      Thêm vào giỏ
                     </button>
                   </div>
                 </div>
@@ -114,6 +111,14 @@
       (placeOrder)="onPlaceOrder($event)"
     />
   }
+  @if (modalVisible && selectedProduct && modalType === 'cart') {
+    <app-cart-item
+      [product]="selectedProduct"
+      (closeModal)="closeCartModal()"
+      (placeOrder)="onPlaceOrder($event)"
+    />
+  }
+
 
   @if (isCartVisible) {
     <app-cart

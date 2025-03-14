@@ -1,5 +1,5 @@
 import { AfterViewInit, Component, ElementRef, inject, ViewChild } from '@angular/core';
-import { RouterLink } from "@angular/router";
+import {Router, RouterLink} from "@angular/router";
 import { ToastComponent } from "../toast/toast.component";
 import { FormsModule, NgForm } from '@angular/forms';
 import { AuthService } from "../services/auth/auth.service";
@@ -19,6 +19,7 @@ import { SceneEnvironment } from '../../assets/scripts/SceneEnvironment.js';
 })
 export class RegisterComponent implements AfterViewInit {
   accountService = inject(AuthService);
+  router = inject(Router)
   toastHeading = ""; toastDescription = ""; toastVisible = false;
 
   @ViewChild('container') containerRef!: ElementRef;
@@ -100,7 +101,9 @@ export class RegisterComponent implements AfterViewInit {
       this.accountService.createAccount(form.value).subscribe({
         next: res => {
           this.generateToast("Thành công", "Đăng ký thành công");
+          localStorage.setItem('otpEmail', form.value.email);
           form.reset();
+          this.router.navigate(['/otp']); // Điều hướng đến trang nhập OTP
         },
         error: err => {
           const errorMessage = err?.error?.message

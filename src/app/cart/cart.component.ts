@@ -1,10 +1,15 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { CartItem } from '../model/CartItem';
+import {RouterLink} from "@angular/router";
+import {CartService} from "../services/product/cart.service";
 
 @Component({
   selector: 'app-cart',
   standalone: true,
   templateUrl: './cart.component.html',
+  imports: [
+    RouterLink
+  ],
   styleUrl: './cart.component.scss'
 })
 export class CartComponent {
@@ -13,15 +18,11 @@ export class CartComponent {
 
   cartItems: CartItem[] = [];
 
-  constructor() {
-    this.cartItems = [
-      { id: 1, name: "Grilled Beef with potatoes", price: 29.95, quantity: 1, image: "/placeholder.svg?height=80&width=80" },
-      { id: 2, name: "Fresh Mushroom with vegetables", price: 24.5, quantity: 2, image: "/placeholder.svg?height=80&width=80" },
-      { id: 3, name: "Italian Pizza with extra cheese", price: 19.95, quantity: 1, image: "/placeholder.svg?height=80&width=80" },
-    ];
-  }
+  constructor(
+    private cartService:CartService
+  ) {}
 
-  get total(): number {
+  getAllCart(): number {
     return this.cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
   }
 

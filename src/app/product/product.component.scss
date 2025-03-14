@@ -330,11 +330,11 @@ section {
     transition: $transition;
 
     &.order-button {
-      background-color: #ffc107;
+      background-color: #b9915a;
       color: #000;
 
       &:hover {
-        background-color: darken(#ffc107, 10%);
+        background-color: darken(#b9915a, 10%);
       }
     }
 

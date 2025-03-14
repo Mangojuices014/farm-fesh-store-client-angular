@@ -1,4 +1,4 @@
-import {Component, type ElementRef, type OnInit, type QueryList, ViewChild, ViewChildren} from "@angular/core"
+import {Component, type ElementRef, inject, type OnInit, type QueryList, ViewChild, ViewChildren} from "@angular/core"
 import { CommonModule } from "@angular/common"
 import { FormsModule } from "@angular/forms"
 
@@ -8,6 +8,8 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 // @ts-ignore
 import { SceneEnvironment } from '../../assets/scripts/SceneEnvironment.js';
+import {AuthService} from "../services/auth/auth.service";
+import {Router} from "@angular/router";
 
 @Component({
   selector: "app-otp",
@@ -26,6 +28,11 @@ export class OTPComponent implements OnInit {
   scene!: THREE.Scene;
   renderer!: THREE.WebGLRenderer;
   controls!: OrbitControls;
+
+  authService = inject(AuthService)
+  router = inject(Router)
+  toastHeading = ""; toastDescription = ""; toastVisible = false;
+
 
   ngAfterViewInit(): void {
     this.initThreeJS();
@@ -146,11 +153,32 @@ export class OTPComponent implements OnInit {
   }
 
   verifyOTP(): void {
-    if (this.isButtonActive) {
-      const otp = this.otpValues.join("")
-      console.log("OTP Submitted:", otp)
-      // Here you would typically call a service to verify the OTP
+    if (!this.isButtonActive) return;
+
+    const otp = this.otpValues.join("").trim();
+    if (!otp || otp.length !== 6) { // Giả sử OTP có 6 số
+      alert("Vui lòng nhập OTP hợp lệ!");
+      return;
     }
+    this.authService.verifyOtp(otp).subscribe({
+      next: () => {
+        localStorage.removeItem("otpEmail");
+        this.router.navigate(["/login"]);
+        this.generateToast('Thành công', 'Xác thực thành công')
+      },
+      error: err => {
+        this.generateToast('Thành công', err.message)
+      }
+    });
+  }
+  generateToast(heading: string, description: string) {
+    this.toastHeading = heading;
+    this.toastDescription = description;
+    this.toastVisible = true;
+
+    setTimeout(() => {
+      this.toastVisible = false;
+    }, 5000);
+
   }
 }
-

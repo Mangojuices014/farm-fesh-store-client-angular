@@ -1,7 +1,7 @@
 import {inject, Injectable} from '@angular/core';
 import {apiUrl} from "../../utils/api.config";
 import {HttpClient} from "@angular/common/http";
-import {BehaviorSubject} from "rxjs";
+import {BehaviorSubject, catchError, throwError} from "rxjs";
 import { JwtHelperService } from "@auth0/angular-jwt";
 
 
@@ -27,6 +27,21 @@ export class AuthService {
 
   loginAccount(account: any) {
     return this.http.post(BASE_URL + "/login", account, this.noauth);
+  }
+
+  verifyOtp(otp: string) {
+    const email = localStorage.getItem("otpEmail");
+
+    if (!email) {
+      return throwError(() => new Error("Không tìm thấy Email của bạn"));
+    }
+
+    return this.http.post(BASE_URL + "/verify-otp", { email, otp }).pipe(
+      catchError(error => {
+        console.error("Lỗi xác thực OTP:", error);
+        return throwError(() => new Error("Xác thực OTP thất bại, vui lòng thử lại!"));
+      })
+    );
   }
 
 }

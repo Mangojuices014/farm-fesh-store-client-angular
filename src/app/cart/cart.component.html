@@ -2,7 +2,7 @@
   <div class="shopping__cart">
     <div class="cart-header">
       <h1 class="brand-title">Feliciano</h1>
-      <p class="cart-subtitle">Your Shopping Cart</p>
+      <p class="cart-subtitle">Giỏ hàng của bạn</p>
     </div>
 
     @if (cartItems.length === 0) {
@@ -10,8 +10,8 @@
         <div class="empty-cart-icon">
           <i class="fa-solid fa-cart-shopping"></i>
         </div>
-        <p>Your cart is empty</p>
-        <button class="btn-continue">Continue Shopping</button>
+        <p>Giỏ hàng của bạn đang trống</p>
+        <button class="btn-continue">Tiếp tục mua sắm</button>
       </div>
     } @else {
       <ul class="shopping__list">
@@ -40,24 +40,24 @@
 
       <div class="cart-summary">
         <div class="summary-row">
-          <span>Subtotal:</span>
+          <span>Tạm tính:</span>
           <span>{{total}}</span>
         </div>
         <div class="summary-row">
-          <span>Shipping:</span>
-          <span>Free</span>
+          <span>Phí vận chuyển:</span>
+          <span>Miễn phí</span>
         </div>
         <div class="summary-row total">
-          <span>Total:</span>
+          <span>Tổng cộng:</span>
           <span>{{total}}</span>
         </div>
       </div>
 
       <div class="cart-actions">
-        <button class="btn-checkout" (click)="checkout()">
-          Proceed to Checkout
+        <button class="btn-checkout" routerLink="/approval">
+          Tiến hành thanh toán
         </button>
-        <button class="btn-continue">Continue Shopping</button>
+        <button (click)="closeCart()" class="btn-continue">Tiếp tục mua sắm</button>
       </div>
     }
 

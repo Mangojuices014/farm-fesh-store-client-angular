@@ -45,10 +45,10 @@ export class SidebarComponent implements OnInit {
 
   menuItems: MenuItem[] = [
     { icon: "fa-solid fa-house", label: "Trang chủ", route: "/home" },
-    { icon: "fa-solid fa-utensils", label: "Thực đơn", route: "/products" },
+    { icon: "fa-solid fa-utensils", label: "Sản phẩm", route: "/products" },
     { icon: "fa-solid fa-cart-shopping", label: "Giỏ hàng", route: "/cart" +
         "" },
-    { icon: "fa-solid fa-receipt", label: "Đơn hàng", route: "/otp" },
+    { icon: "fa-solid fa-receipt", label: "Đơn hàng", route: "/products" },
     {
       icon: "fa-solid fa-user-shield",
       label: "Quản trị",

@@ -11,6 +11,7 @@ import type { Cart } from "../model/Cart"
 import { CartComponent } from "../cart/cart.component"
 import { CommonModule } from "@angular/common"
 import { NzSkeletonModule } from "ng-zorro-antd/skeleton"
+import {CartItemComponent} from "../cart-item/cart-item.component";
 
 @Component({
   selector: "app-product",
@@ -18,13 +19,13 @@ import { NzSkeletonModule } from "ng-zorro-antd/skeleton"
   imports: [
     CommonModule,
     SidebarComponent,
-    HeaderComponent,
     ProductItemComponent,
     ToastComponent,
     FormsModule,
     NzSelectModule,
     NzSkeletonModule,
     CartComponent,
+    CartItemComponent
   ],
   templateUrl: "./product.component.html",
   styleUrls: ["./product.component.scss"],
@@ -79,12 +80,11 @@ export class ProductComponent implements OnInit {
     this.modalVisible = true
   }
 
-  openCartModal(product: Product): void {
-    this.selectedProduct = product
-    this.modalType = "cart"
-    this.modalVisible = true
-    this.cartItemCount++
-    this.generateToast("Thành công", `Đã thêm ${product.name} vào giỏ hàng`)
+  openCartModal(product: Product) {
+    console.log("Mở modal giỏ hàng với sản phẩm:", product);
+    this.selectedProduct = product;
+    this.modalVisible = true;
+    this.modalType = 'cart';
   }
 
   closeOrderModal(): void {
@@ -102,18 +102,13 @@ export class ProductComponent implements OnInit {
     this.closeOrderModal()
   }
 
-  onPlaceCart(order: { product: Product; quantity: number }): void {
-    this.generateToast(
-      "Thành công",
-      `Thêm vào giỏ hàng thành công: ${order.product.name} - Số lượng: ${order.quantity}`,
-    )
-    this.closeOrderModal()
-    this.cartItemCount++
-  }
-
   getImageId(imageUrl: string): string {
     const match = imageUrl.match(/(?:\/d\/|id=)([a-zA-Z0-9-_]+)/);
     return match ? match[1] : "";
+  }
+
+  formatPrice(price: number): string {
+    return new Intl.NumberFormat("vi-VN").format(price)
   }
 
   generateToast(heading: string, description: string) {
@@ -125,8 +120,5 @@ export class ProductComponent implements OnInit {
     }, 5000)
   }
 
-  formatPrice(price: number): string {
-    return new Intl.NumberFormat("vi-VN").format(price)
-  }
 }
 

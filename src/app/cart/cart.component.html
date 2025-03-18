@@ -18,30 +18,45 @@
         @for (item of cartItems; track item.id) {
           <li class="cart-item">
             <div class="item-image">
-              <img [src]="item.image" [alt]="item.name" class="cart-img">
+              <img [src]="'https://drive.google.com/thumbnail?id=' + getImageId(item.image)"
+                   [alt]="item.name"
+                   class="cart-img">
             </div>
+
             <div class="item-details">
-              <h3 class="item-name">{{item.name}}</h3>
-              <div class="item-price">{{item.price}}</div>
+
+              <h3 class="item-name">{{ item.name }}</h3>
+
+              <div class="item-price">{{ item.price | currency:'VND' }}</div>
+
               <div class="item-controls">
                 <div class="quantity-control">
-                  <button class="quantity-btn" (click)="updateQuantity(item, item.quantity - 1)" [disabled]="item.quantity <= 1">-</button>
-                  <span class="quantity">{{item.quantity}}</span>
+                  <button class="quantity-btn" (click)="updateQuantity(item, item.quantity - 1)"
+                          [disabled]="item.quantity <= 1">-
+                  </button>
+                  <span class="quantity">{{ item.quantity }}</span>
                   <button class="quantity-btn" (click)="updateQuantity(item, item.quantity + 1)">+</button>
                 </div>
-                <button class="remove-btn" (click)="removeItem(item.id)">
+
+                <label class="custom-checkbox">
+                  <input type="checkbox" >
+                  <span class="checkmark"></span>
+                </label>
+
+                <button class="remove-btn">
                   <i class="fa-solid fa-trash"></i>
                 </button>
               </div>
             </div>
           </li>
+
         }
       </ul>
 
       <div class="cart-summary">
         <div class="summary-row">
           <span>Tạm tính:</span>
-          <span>{{total}}</span>
+          <span>{{ getTotalPrice() | currency:'VND' }}</span>
         </div>
         <div class="summary-row">
           <span>Phí vận chuyển:</span>
@@ -49,7 +64,7 @@
         </div>
         <div class="summary-row total">
           <span>Tổng cộng:</span>
-          <span>{{total}}</span>
+          <span>{{ getTotalPrice() | currency:'VND' }}</span>
         </div>
       </div>
 
@@ -59,6 +74,7 @@
         </button>
         <button (click)="closeCart()" class="btn-continue">Tiếp tục mua sắm</button>
       </div>
+
     }
 
     <button class="shopping__close" (click)="closeCart()">

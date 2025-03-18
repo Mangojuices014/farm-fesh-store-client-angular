@@ -132,8 +132,8 @@
           <div class="action-buttons">
             <button
               class="order-now-btn"
-              (click)="onPlaceOrder()"
               [disabled]="loading || !product.quantityProduct || product.quantityProduct === 0"
+              [routerLink]="'/approval'"
             >
               @if (loading) {
                 <i class="fa-solid fa-spinner fa-spin"></i> Đang xử lý...

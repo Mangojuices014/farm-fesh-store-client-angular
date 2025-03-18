@@ -48,7 +48,7 @@ export class SidebarComponent implements OnInit {
     { icon: "fa-solid fa-utensils", label: "Sản phẩm", route: "/products" },
     { icon: "fa-solid fa-cart-shopping", label: "Giỏ hàng", route: "/cart" +
         "" },
-    { icon: "fa-solid fa-receipt", label: "Đơn hàng", route: "/products" },
+    { icon: "fa-solid fa-receipt", label: "Đơn hàng", route: "/orderInfo" },
     {
       icon: "fa-solid fa-user-shield",
       label: "Quản trị",

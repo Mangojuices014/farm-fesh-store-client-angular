@@ -31,25 +31,29 @@
 
               <div class="item-controls">
                 <div class="quantity-control">
-                  <button class="quantity-btn" (click)="updateQuantity(item, item.quantity - 1)"
+                  <button class="quantity-btn"
+                          (click)="updateQualityMinus(item.id)"
                           [disabled]="item.quantity <= 1">-
                   </button>
                   <span class="quantity">{{ item.quantity }}</span>
-                  <button class="quantity-btn" (click)="updateQuantity(item, item.quantity + 1)">+</button>
+                  <button class="quantity-btn"
+                          (click)="updateQualityPlus(item.id)">+
+                  </button>
                 </div>
 
                 <label class="custom-checkbox">
-                  <input type="checkbox" >
+                  <input type="checkbox"
+                         [checked]="item.selected === 1"
+                         (change)="updateSelect(item.id)">
                   <span class="checkmark"></span>
                 </label>
 
-                <button class="remove-btn">
+                <button class="remove-btn" (click)="deleteCart(item.id)">
                   <i class="fa-solid fa-trash"></i>
                 </button>
               </div>
             </div>
           </li>
-
         }
       </ul>
 

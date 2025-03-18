@@ -4,11 +4,12 @@ import  { Product } from "../model/Product"
 import { ToastComponent } from "../toast/toast.component"
 import  { OrderService } from "../services/product/order.service"
 import { CommonModule } from "@angular/common"
+import {RouterLink} from "@angular/router";
 
 @Component({
   selector: "app-product-item",
   standalone: true,
-  imports: [CommonModule, FormsModule, ToastComponent],
+  imports: [CommonModule, FormsModule, ToastComponent, RouterLink],
   templateUrl: "./product-item.component.html",
   styleUrls: ["./product-item.component.scss"],
 })
@@ -21,7 +22,19 @@ export class ProductItemComponent {
   specialInstructions = ""
   activeTab = "details" // 'details' or 'nutrition'
 
-  @Input() product: Product | null = null
+  @Input() product: Product = {
+    id: '',
+    sku: '',
+    name: '',
+    description: '',
+    price: 0,
+    quantityProduct: 1,
+    image: '',
+    origin: '',
+    harvestDate: '',
+    shelfLife: 0,
+    weight: 0,
+  };
   @Output() closeModal = new EventEmitter<void>()
   @Output() placeOrder = new EventEmitter<{ product: Product; quantity: number }>()
 
@@ -33,43 +46,6 @@ export class ProductItemComponent {
     this.closeModal.emit()
   }
 
-  onPlaceOrder(): void {
-    if (!this.product) return
-
-    if (this.quantity <= 0 || this.quantity > (this.product.quantityProduct || 0)) {
-      this.generateToast("Thất bại", "Số lượng không hợp lệ hoặc không đủ hàng.")
-      return
-    }
-
-    const orderData = {
-      order_details: [
-        {
-          quantityOrder: this.quantity,
-          product_id: this.product.id,
-        },
-      ],
-    }
-
-    console.log("🛒 Dữ liệu gửi lên API:", JSON.stringify(orderData))
-
-    this.loading = true
-    this.orderService.createOrder(orderData).subscribe({
-      next: (res) => {
-        console.log("✅ Phản hồi từ API:", res)
-        this.generateToast("Thành công", "Đơn hàng đã được tạo thành công.")
-        this.placeOrder.emit({ product: this.product!, quantity: this.quantity })
-        this.onCloseModal()
-      },
-      error: (err) => {
-        console.error("❌ Lỗi API:", err)
-        this.generateToast("Thất bại", "Bạn vẫn chưa đăng nhập hoặc dữ liệu sai.")
-        this.loading = false
-      },
-      complete: () => {
-        this.loading = false
-      },
-    })
-  }
 
   getImageId(imageUrl: string): string {
     const match = imageUrl.match(/\/d\/(.*?)\//)

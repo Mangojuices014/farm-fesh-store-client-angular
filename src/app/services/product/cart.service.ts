@@ -37,9 +37,21 @@ export class CartService {
       .pipe(catchError((error) => throwError(() => new Error(error))));
   }
 
-  updateQuantity(cartId: string): Observable<any> {
+  updateSelect(cartId: string): Observable<any> {
     return this.http
       .put(`${this.BASE_URL}/select-cart/${cartId}`, {}, { headers: this.getHeaders() })
+      .pipe(catchError((error) => throwError(() => new Error(error))));
+  }
+
+  updateQuantityPlus(cartId: string): Observable<any> {
+    return this.http
+      .put(`${this.BASE_URL}/quality-plus/${cartId}`, {}, { headers: this.getHeaders() })
+      .pipe(catchError((error) => throwError(() => new Error(error))));
+  }
+
+  updateQuantityMinus(cartId: string): Observable<any> {
+    return this.http
+      .put(`${this.BASE_URL}/quality-minus/${cartId}`, {}, { headers: this.getHeaders() })
       .pipe(catchError((error) => throwError(() => new Error(error))));
   }
 

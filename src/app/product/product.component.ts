@@ -61,7 +61,6 @@ export class ProductComponent implements OnInit {
         if (res && res.data) {
           this.products = res.data
           this.loading = false
-          console.log(res.data)
         } else {
           console.warn("Dữ liệu trả về không hợp lệ:", res)
           this.loading = false

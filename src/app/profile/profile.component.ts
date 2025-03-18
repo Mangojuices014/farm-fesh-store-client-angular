@@ -69,7 +69,6 @@ export class ProfileComponent implements OnInit {
         this.account = res.data;
         this.tempAccount = { ...this.account };
         this.isLoading = false;
-        console.log("Infor API:", this.account);
       },
       error: err => {
         console.log("Error:", err);

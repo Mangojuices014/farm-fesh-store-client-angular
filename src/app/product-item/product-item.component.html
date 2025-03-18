@@ -133,7 +133,7 @@
             <button
               class="order-now-btn"
               [disabled]="loading || !product.quantityProduct || product.quantityProduct === 0"
-              [routerLink]="'/approval'"
+              (click)="orderNow()"
             >
               @if (loading) {
                 <i class="fa-solid fa-spinner fa-spin"></i> Đang xử lý...

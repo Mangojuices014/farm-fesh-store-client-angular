@@ -1,69 +1,37 @@
-import {Component, EventEmitter, Input, Output} from '@angular/core';
-import {Product} from "../model/Product";
+import { Component, Input, OnInit } from '@angular/core';
+import { Product } from "../model/Product";
+import {ActivatedRoute, Router} from "@angular/router";
+import {OrderService} from "../services/product/order.service";
 
 @Component({
   selector: 'app-approval',
   standalone: true,
-  imports: [],
   templateUrl: './approval.component.html',
-  styleUrl: './approval.component.scss'
+  styleUrls: ['./approval.component.scss']
 })
-export class ApprovalComponent {
-  modalVisible = false
-  loading = false
-  toastHeading = ""
-  toastDescription = ""
-  toastVisible = false
-  specialInstructions = ""
-  activeTab = "details" // 'details' or 'nutrition'
+export class ApprovalComponent implements OnInit{
+  cartItems: {
+    product: Product;
+    quantity: number;
+    specialInstructions: string
+  }[] = [];
 
-  @Input() product: Product = {
-    id: '',
-    sku: '',
-    name: '',
-    description: '',
-    price: 0,
-    quantityProduct: 1,
-    image: '',
-    origin: '',
-    harvestDate: '',
-    shelfLife: 0,
-    weight: 0,
-  };
-  @Output() closeModal = new EventEmitter<void>()
-  @Output() placeOrder = new EventEmitter<{ product: Product; quantity: number }>()
+  constructor(
+    private route: ActivatedRoute,
+    private orderService: OrderService,
+    private router: Router
+  ) {}
 
-  onPlaceOrder(): void {
-    if (!this.product) return
-
-    const orderData = {
-      order_details: [
-        {
-          quantityOrder: this.quantity,
-          product_id: this.product.id,
-        },
-      ],
-    }
-
-    console.log("🛒 Dữ liệu gửi lên API:", JSON.stringify(orderData))
-
-    this.loading = true
-    this.orderService.createOrder(orderData).subscribe({
-      next: (res) => {
-        console.log("✅ Phản hồi từ API:", res)
-        this.generateToast("Thành công", "Đơn hàng đã được tạo thành công.")
-        this.placeOrder.emit({ product: this.product!, quantity: this.quantity })
-        this.onCloseModal()
-      },
-      error: (err) => {
-        console.error("❌ Lỗi API:", err)
-        this.generateToast("Thất bại", "Bạn vẫn chưa đăng nhập hoặc dữ liệu sai.")
-        this.loading = false
-      },
-      complete: () => {
-        this.loading = false
-      },
-    })
+  ngOnInit(): void {
   }
 
+  formatPrice(price: number): string {
+    return new Intl.NumberFormat("vi-VN").format(price);
+  }
+
+  getImageId(imageUrl: string): string {
+    const match = imageUrl.match(/\/d\/(.*?)\//)
+    return match ? match[1] : ""
+  }
 }
+

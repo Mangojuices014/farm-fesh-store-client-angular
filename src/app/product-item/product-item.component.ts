@@ -4,7 +4,7 @@ import  { Product } from "../model/Product"
 import { ToastComponent } from "../toast/toast.component"
 import  { OrderService } from "../services/product/order.service"
 import { CommonModule } from "@angular/common"
-import {RouterLink} from "@angular/router";
+import {Router, RouterLink} from "@angular/router";
 
 @Component({
   selector: "app-product-item",
@@ -40,7 +40,9 @@ export class ProductItemComponent {
 
   quantity = 1
 
-  constructor(private orderService: OrderService) {}
+  constructor(
+    private orderService: OrderService,
+    private router: Router) {}
 
   onCloseModal(): void {
     this.closeModal.emit()
@@ -72,13 +74,23 @@ export class ProductItemComponent {
     this.activeTab = tab
   }
 
-  generateToast(heading: string, description: string) {
-    this.toastHeading = heading
-    this.toastDescription = description
-    this.toastVisible = true
-    setTimeout(() => {
-      this.toastVisible = false
-    }, 5000)
+  orderNow() {
+    const orderData = {
+      product: this.product,
+      quantity: this.quantity
+    };
+
+    console.log("🔥 Lưu đơn hàng vào OrderService:", orderData);
+    this.orderService.setOrderData(orderData); // Lưu dữ liệu vào service
+
+    // Chuyển hướng chỉ với productId và quantity
+    this.router.navigate(['/approval'], {
+      queryParams: {
+        productId: this.product.id,
+        quantity: this.quantity
+      }
+    });
   }
+
 }
 

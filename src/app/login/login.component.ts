@@ -110,7 +110,6 @@ export class LoginComponent implements AfterViewInit {
               response.data.access_token
             )
             const roles = decodedToken?.realm_access?.roles || [];
-            console.log("Vai trò của người dùng:", roles);
 
             if (roles.includes("ADMIN")) {
               localStorage.setItem("role", "admin");

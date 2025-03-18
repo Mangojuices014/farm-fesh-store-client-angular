@@ -1,7 +1,7 @@
 import {inject, Injectable} from '@angular/core';
 import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {apiUrl} from "../../utils/api.config";
-import {throwError} from "rxjs";
+import {BehaviorSubject, throwError} from "rxjs";
 
 export const BASE_URL = apiUrl.BASE_URL + '/orders';
 @Injectable({
@@ -13,6 +13,21 @@ export class OrderService {
   noauth = { headers: { "noauth": "noauth" } };
 
   constructor() { }
+
+  private orderData = new BehaviorSubject<any>(null);
+  orderData$ = this.orderData.asObservable(); // Dữ liệu có thể subscribe
+
+  setOrderData(data: any) {
+    this.orderData.next(data);
+  }
+
+  getOrderData() {
+    return this.orderData.getValue();
+  }
+
+  clearOrderData() {
+    this.orderData.next(null);
+  }
 
   createOrder(product: any) {
     const token = localStorage.getItem("token");

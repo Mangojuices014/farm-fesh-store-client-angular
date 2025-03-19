@@ -4,6 +4,8 @@ import {apiUrl} from "../../utils/api.config";
 import {BehaviorSubject, Observable, throwError} from "rxjs";
 import {catchError} from "rxjs/operators";
 import {Order} from "../../model/Order";
+import {ApiResponse} from "../../model/ApiResponse";
+import {Product} from "../../model/Product";
 
 @Injectable({
   providedIn: 'root'
@@ -40,6 +42,11 @@ export class OrderService {
         headers: this.getHeaders(),
       })
       .pipe(catchError((error) => throwError(() => new Error(error.message))));
+  }
+
+  getOder(orderId: string): Observable<ApiResponse<Order>> { // Thay đổi kiểu trả về
+    return this.http.get<ApiResponse<Order>>(`${this.BASE_URL}/get-order/${orderId}`)
+      .pipe(catchError(error => throwError(() => new Error(error))));
   }
 
 }

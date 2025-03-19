@@ -1,9 +1,10 @@
 export interface Order {
+  id:string;
+  totalPrice:number
   orderInfo: string;
   shipment: Shipment;
   details: OrderDetail;
 }
-
 export interface Shipment {
   address: string;
   phone: string;

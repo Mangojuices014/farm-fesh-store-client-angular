@@ -1,7 +1,7 @@
-import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
-import { Product } from '../model/Product';
-import { Observable } from 'rxjs';
+import {Component, NgZone, OnInit} from '@angular/core';
+import {ActivatedRoute, Router} from '@angular/router';
+import {Product} from '../model/Product';
+import {Observable} from 'rxjs';
 import {ProductService} from "../services/product/product.service";
 import {ApiResponse} from "../model/ApiResponse";
 import {CurrencyPipe} from "@angular/common";
@@ -23,31 +23,23 @@ import {ToastComponent} from "../toast/toast.component";
 })
 export class ApprovalComponent implements OnInit {
   product!: Product;
-  order: Order = {
-    orderInfo: '',
-    shipment: {
-      address: '',
-      phone: '',
-      email: '',
-      customerName: ''
-    },
-    details: {
-      productId: '',
-      quantity: 1
-    }
-  };
+  order!: Order;
   quantity: number = 1;
   loading = false;
   toastHeading = '';
   toastDescription = '';
   toastVisible = false;
   cartItems: { product: Product; quantity: number }[] = [];
+  orderCreated = false; // Mặc định chưa tạo đơn hàng
+
 
   constructor(
     private route: ActivatedRoute,
     private productService: ProductService,
-    private orderService: OrderService
-  ) {}
+    private orderService: OrderService,
+    private router: Router
+  ) {
+  }
 
   ngOnInit() {
     this.route.queryParams.subscribe(params => {
@@ -59,7 +51,7 @@ export class ApprovalComponent implements OnInit {
           next: (response) => {
             if (response && response.data) {
               this.product = response.data;
-              this.cartItems = [{ product: this.product, quantity }];
+              this.cartItems = [{product: this.product, quantity}];
 
               // Cập nhật thông tin đơn hàng
               this.order.details.productId = productId;
@@ -87,11 +79,14 @@ export class ApprovalComponent implements OnInit {
       next: (res) => {
         console.log("API Response:", res);
         this.order = res.data;
-        alert("Thêm địa chỉ giao hàng thành công")
+        this.orderCreated = true; // Đơn hàng đã được tạo
+        this.router.navigate(['/payment-confirmation'], {
+          queryParams: {orderId: this.order.id} // hoặc cách truyền dữ liệu khác
+        });
       },
       error: (err) => {
         console.error("Lỗi khi tạo đơn hàng:", err);
-        this.showToast("Thất bại", err.error.message);
+        this.showToast("Thất bại", err.error.message || "Lỗi không xác định.");
         this.loading = false; // Kết thúc loading
       },
       complete: () => {
@@ -99,7 +94,6 @@ export class ApprovalComponent implements OnInit {
       }
     });
   }
-
 
   validateOrder(): boolean {
     return this.order.shipment.address.trim() !== '' &&
@@ -120,11 +114,19 @@ export class ApprovalComponent implements OnInit {
     const match = imageUrl.match(/\/d\/(.*?)\//);
     return match ? match[1] : '';
   }
+
   showToast(heading: string, description: string): void {
     this.toastHeading = heading;
     this.toastDescription = description;
     this.toastVisible = true;
     setTimeout(() => (this.toastVisible = false), 5000);
   }
-}
 
+  confirmOrder(): void {
+    // Xử lý logic xác nhận đơn hàng ở đây
+    // Ví dụ: Gửi yêu cầu API cuối cùng để xác nhận đơn hàng và chuyển hướng người dùng
+    console.log('Đơn hàng đã được xác nhận!');
+    //this.router.navigate(['/order-confirmation']); // Ví dụ: Chuyển hướng đến trang xác nhận đơn hàng
+    this.showToast("Thành công", "Đơn hàng đã được xác nhận thành công");
+  }
+}

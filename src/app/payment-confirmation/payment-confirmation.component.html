@@ -1,0 +1,31 @@
+<main>
+  <div class="container">
+    <h2>Xác nhận thanh toán</h2>
+
+    @if (loading) {
+      <p>Đang tải thông tin đơn hàng...</p>
+    } @else if (order) {
+      <div class="order-details">
+        <h3>Thông tin đơn hàng</h3>
+        <p>Mã đơn hàng: {{ order.id }}</p>
+        <p>Địa chỉ giao hàng: {{ order.shipment.address }}</p>
+        <p>Tên khách hàng: {{ order.shipment.customerName }}</p>
+
+        <h3>Chi tiết đơn hàng</h3>
+        <ul>
+          <li>
+            Sản phẩm: {{ order.details.productId }}
+            Số lượng: {{ order.details.quantity }}
+          </li>
+          <!-- Lặp qua danh sách sản phẩm nếu có -->
+        </ul>
+
+        <p>{{ order.totalPrice }}</p>
+      </div>
+
+      <button >Xác nhận thanh toán</button>
+    } @else {
+      <p>Không tìm thấy thông tin đơn hàng.</p>
+    }
+  </div>
+</main>

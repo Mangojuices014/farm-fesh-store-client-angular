@@ -17,6 +17,7 @@ import { provideAnimationsAsync } from '@angular/platform-browser/animations/asy
 import {CartComponent} from "./app/cart/cart.component";
 import {ApprovalComponent} from "./app/approval/approval.component";
 import {OTPComponent} from "./app/otp/otp.component";
+import {PaymentConfirmationComponent} from "./app/payment-confirmation/payment-confirmation.component";
 
 registerLocaleData(en);
 const routes: Routes = [
@@ -28,6 +29,7 @@ const routes: Routes = [
   { path: 'cart', component: CartComponent},
   { path: 'approval', component: ApprovalComponent},
   { path: 'otp', component: OTPComponent},
+  { path: 'payment-confirmation', component: PaymentConfirmationComponent},
   { path: '', redirectTo: '/login', pathMatch: 'full' }
 ];
 

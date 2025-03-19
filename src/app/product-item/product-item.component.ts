@@ -79,10 +79,7 @@ export class ProductItemComponent {
       product: this.product,
       quantity: this.quantity
     };
-
-    console.log("🔥 Lưu đơn hàng vào OrderService:", orderData);
-    this.orderService.setOrderData(orderData); // Lưu dữ liệu vào service
-
+    this.orderService.setOrderData(orderData);
     // Chuyển hướng chỉ với productId và quantity
     this.router.navigate(['/approval'], {
       queryParams: {

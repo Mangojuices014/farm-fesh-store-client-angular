@@ -1,14 +1,15 @@
 import {inject, Injectable} from '@angular/core';
 import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {apiUrl} from "../../utils/api.config";
-import {BehaviorSubject, throwError} from "rxjs";
+import {BehaviorSubject, Observable, throwError} from "rxjs";
+import {catchError} from "rxjs/operators";
+import {Order} from "../../model/Order";
 
-export const BASE_URL = apiUrl.BASE_URL + '/orders';
 @Injectable({
   providedIn: 'root'
 })
 export class OrderService {
-
+  private readonly BASE_URL = 'http://localhost:8182/api/v1/orders';
   http = inject(HttpClient);
   noauth = { headers: { "noauth": "noauth" } };
 
@@ -17,26 +18,26 @@ export class OrderService {
   private orderData = new BehaviorSubject<any>(null);
   orderData$ = this.orderData.asObservable(); // Dữ liệu có thể subscribe
 
+  private getHeaders(): HttpHeaders {
+    const token = localStorage.getItem('token');
+    if (!token) {
+      console.error('No token found in localStorage');
+      throw new Error('Token is missing');
+    }
+    return new HttpHeaders({
+      Authorization: `Bearer ${token}`,
+      'Content-Type': 'application/json',
+    });
+  }
+
   setOrderData(data: any) {
     this.orderData.next(data);
   }
 
-  getOrderData() {
-    return this.orderData.getValue();
-  }
-
-  clearOrderData() {
-    this.orderData.next(null);
-  }
-
-  createOrder(product: any) {
-    const token = localStorage.getItem("token");
-    const headers = new HttpHeaders({
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`,
-    });
-
-    return this.http.post(BASE_URL + "/create-order/cart", product, { headers });
+  createOrder(order: Order) {
+    return this.http
+      .post(`${this.BASE_URL}/create-order`, order, { headers: this.getHeaders() })
+      .pipe(catchError((error) => throwError(() => new Error(error))));
   }
 
 }

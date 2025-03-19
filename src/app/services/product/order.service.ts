@@ -34,10 +34,12 @@ export class OrderService {
     this.orderData.next(data);
   }
 
-  createOrder(order: Order) {
+  createOrder(order: Order): Observable<{ data: Order }> {
     return this.http
-      .post(`${this.BASE_URL}/create-order`, order, { headers: this.getHeaders() })
-      .pipe(catchError((error) => throwError(() => new Error(error))));
+      .post<{ data: Order }>(`${this.BASE_URL}/create-order/cart`, order, {
+        headers: this.getHeaders(),
+      })
+      .pipe(catchError((error) => throwError(() => new Error(error.message))));
   }
 
 }

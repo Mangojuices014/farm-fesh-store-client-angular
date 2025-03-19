@@ -1,4 +1,18 @@
 <main>
+  <!-- Phần hiển thị thông báo -->
+  @if (toastVisible) {
+    <div class="toast-container">
+      <div class="toast-box">
+        <div class="toast-header">
+          <strong>{{ toastHeading }}</strong>
+        </div>
+        <hr>
+        <div class="toast-body">
+          <p>{{ toastDescription }}</p>
+        </div>
+      </div>
+    </div>
+  }
   <div class="container_comfirm">
     <div class="row g-0">
       <div class="col-md-6 col-sm-12">
@@ -7,29 +21,40 @@
             <h2 class="mb-4">Điền thông tin giao hàng</h2>
             <form>
               <div class="item">
-                <select id="city" aria-label=".form-select-sm" required>
-                  <option value="" selected>Chọn tỉnh thành</option>
+                <label for="address">Địa chỉ cụ thể</label>
+                <input id="address" name="address" placeholder="Địa chỉ" required [(ngModel)]="order.shipment.address" />
+              </div>
+
+              <div class="item">
+                <label for="customerName">Họ và tên</label>
+                <input id="customerName" name="customerName" required [(ngModel)]="order.shipment.customerName" />
+              </div>
+
+              <div class="item">
+                <label for="phone">Số điện thoại</label>
+                <input id="phone" name="phone" required [(ngModel)]="order.shipment.phone" />
+              </div>
+
+              <div class="item">
+                <label for="email">Email</label>
+                <input id="email" name="email" type="email" required [(ngModel)]="order.shipment.email" />
+              </div>
+
+              <div class="item">
+                <label for="paymentMethod">Phương thức thanh toán</label>
+                <select id="paymentMethod" name="paymentMethod" required [(ngModel)]="order.orderInfo">
+                  <option value="Thanh toán khi nhận hàng">Thanh toán khi nhận hàng</option>
+                  <option value="Thanh toán Online">Thanh toán Online</option>
                 </select>
-                <select id="district" aria-label=".form-select-sm" required>
-                  <option value="" selected>Chọn quận huyện</option>
-                </select>
-                <select id="ward" aria-label=".form-select-sm" required>
-                  <option value="" selected>Chọn phường xã</option>
-                </select>
+              </div>
+
+              <div class="button mt-5 text-center">
+                <div class="containerBtn noselect">
+                  <button type="button" (click)="createOrder()">Xác nhận thông tin</button>
+                </div>
               </div>
             </form>
-            <div class="item">
-              <select>
-                <option value="">Phương thức thanh toán</option>
-                <option value="">Thanh toán qua Ngân Hàng</option>
-                <option value="">Thanh khi nhận hàng</option>
-              </select>
-            </div>
-            <div class="button mt-5 text-center">
-              <div class="containerBtn noselect">
-                <button>Xác nhận thông tin</button>
-              </div>
-            </div>
+
           </div>
         </div>
       </div>
@@ -83,3 +108,6 @@
     </div>
   </div>
 </main>
+@if (toastVisible) {
+  <app-toast [heading]="toastHeading" [description]="toastDescription"></app-toast>
+}

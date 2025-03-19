@@ -3,10 +3,14 @@
   position: fixed;
   top: 5%;
   right: 0.5rem;
-  z-index: 9999;
+  z-index: 999919; /* Đặt giá trị lớn hơn */
   display: flex;
   flex-direction: column;
-  gap: 10px; /* Tạo khoảng cách giữa các alert */
+  gap: 10px;
+}
+
+body {
+  overflow: visible !important;
 }
 
 /* Alert box */

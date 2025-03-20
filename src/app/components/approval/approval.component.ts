@@ -95,10 +95,15 @@ export class ApprovalComponent implements OnInit {
         console.log("API Response:", res);
         this.order = res.data;
         this.orderCreated = true; // Đơn hàng đã được tạo
-        sessionStorage.setItem('paymentAllowed', 'true');
-        this.router.navigate(['/payment-confirmation'], {
-          queryParams: {orderId: this.order.id} // hoặc cách truyền dữ liệu khác
-        });
+
+        if (this.order.orderInfo === "Thanh toán khi nhận hàng") {
+          this.router.navigate(['/success']);
+        } else {
+          sessionStorage.setItem('paymentAllowed', 'true');
+          this.router.navigate(['/payment-confirmation'], {
+            queryParams: { orderId: this.order.id }
+          });
+        }
       },
       error: (err) => {
         console.error("Lỗi khi tạo đơn hàng:", err);
@@ -110,6 +115,7 @@ export class ApprovalComponent implements OnInit {
       }
     });
   }
+
 
   validateOrder(): boolean {
     return this.order.shipment.address.trim() !== '' &&

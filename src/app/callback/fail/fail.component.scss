@@ -1,0 +1,31 @@
+.payment-failure-container {
+  text-align: center;
+  padding: 50px;
+  background-color: #f9f9f9;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  margin: 50px auto;
+  max-width: 600px;
+}
+
+h1 {
+  color: #dc3545; /* Red color for failure */
+}
+
+p {
+  margin-bottom: 15px;
+}
+
+button {
+  background-color: #dc3545;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin: 10px;
+}
+
+button:hover {
+  background-color: #c82333;
+}

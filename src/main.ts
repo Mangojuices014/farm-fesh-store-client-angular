@@ -3,21 +3,23 @@ import { Component, importProvidersFrom } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { provideRouter } from '@angular/router';
 import { provideHttpClient } from '@angular/common/http';
-import {ProfileComponent} from "./app/profile/profile.component";
-import {RegisterComponent} from "./app/register/register.component";
-import {LoginComponent} from "./app/login/login.component";
-import {AuthGuard} from "./app/config/auth.guard";
-import {ProductComponent} from "./app/product/product.component";
-import {TaskComponent} from "./app/task/task.component";
+import {ProfileComponent} from "./app/components/profile/profile.component";
+import {RegisterComponent} from "./app/components/register/register.component";
+import {LoginComponent} from "./app/components/login/login.component";
+import {AuthGuard} from "./app/model/config/auth.guard";
+import {ProductComponent} from "./app/components/product/product.component";
+import {TaskComponent} from "./app/components/task/task.component";
 import { en_US, provideNzI18n } from 'ng-zorro-antd/i18n';
 import { registerLocaleData } from '@angular/common';
 import en from '@angular/common/locales/en';
 import { FormsModule } from '@angular/forms';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
-import {CartComponent} from "./app/cart/cart.component";
-import {ApprovalComponent} from "./app/approval/approval.component";
-import {OTPComponent} from "./app/otp/otp.component";
-import {PaymentConfirmationComponent} from "./app/payment-confirmation/payment-confirmation.component";
+import {CartComponent} from "./app/components/cart/cart.component";
+import {ApprovalComponent} from "./app/components/approval/approval.component";
+import {OTPComponent} from "./app/components/otp/otp.component";
+import {PaymentConfirmationComponent} from "./app/components/payment-confirmation/payment-confirmation.component";
+import {SucessComponent} from "./app/callback/sucess/sucess.component";
+import {FailComponent} from "./app/callback/fail/fail.component";
 
 registerLocaleData(en);
 const routes: Routes = [
@@ -28,8 +30,10 @@ const routes: Routes = [
   { path: 'process', component: TaskComponent},
   { path: 'cart', component: CartComponent},
   { path: 'approval', component: ApprovalComponent},
-  { path: 'otp', component: OTPComponent},
-  { path: 'payment-confirmation', component: PaymentConfirmationComponent},
+  { path: 'otp', component: OTPComponent, canActivate: [AuthGuard] },
+  { path: 'payment-confirmation', component: PaymentConfirmationComponent, canActivate: [AuthGuard] },
+  { path: "success", component: SucessComponent },
+  { path: "failed", component: FailComponent },
   { path: '', redirectTo: '/login', pathMatch: 'full' }
 ];
 

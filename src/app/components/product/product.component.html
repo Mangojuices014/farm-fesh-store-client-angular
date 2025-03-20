@@ -1,0 +1,137 @@
+<main>
+  <app-sidebar />
+  <section>
+    <!-- Hero Banner -->
+    <div class="hero-banner">
+      <div class="hero-image" style="background-image: url(../../../assets/img/demonFruit.jpg);"></div>
+      <div class="hero-overlay"></div>
+      <div class="hero-content">
+        <h1 class="hero-title showtotop">Specialties</h1>
+        <ul class="breadcrumb showtotop">
+          <li class="breadcrumb__item">
+            <a href="../../../index.html">Trang chủ</a>
+            <i class="fa-solid fa-chevron-right"></i>
+          </li>
+          <li class="breadcrumb__item">
+            Menu
+            <i class="fa-solid fa-chevron-right"></i>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Menu Content -->
+    <div class="menu-container">
+      <div class="filter-bar">
+        <div class="filter-title">
+          <h2>Thực đơn của chúng tôi</h2>
+        </div>
+        <div class="filter-controls">
+          <nz-select class="category-filter" nzShowSearch nzAllowClear nzPlaceHolder="Tìm danh mục sản phẩm">
+            <nz-option nzLabel="Tất cả" nzValue="all"></nz-option>
+            <nz-option nzLabel="Món chính" nzValue="main"></nz-option>
+            <nz-option nzLabel="Món tráng miệng" nzValue="dessert"></nz-option>
+            <nz-option nzLabel="Đồ uống" nzValue="drinks"></nz-option>
+          </nz-select>
+
+          <nz-select class="price-filter" nzShowSearch nzAllowClear nzPlaceHolder="Giá">
+            <nz-option nzLabel="Từ cao đến thấp" nzValue="high"></nz-option>
+            <nz-option nzLabel="Từ thấp đến cao" nzValue="low"></nz-option>
+          </nz-select>
+        </div>
+      </div>
+
+      <!-- Products Grid -->
+      <div class="products-container">
+        @if (loading) {
+          <div class="loading-container">
+            @for (i of [1, 2, 3, 4]; track i) {
+              <div class="product-skeleton">
+                <nz-skeleton [nzActive]="true" [nzAvatar]="{ size: 'large' }" [nzParagraph]="{ rows: 3 }"></nz-skeleton>
+              </div>
+            }
+          </div>
+        } @else if (products.length > 0) {
+          <div class="products-grid">
+            @for (product of products; track product.id) {
+              <div class="product-card showtotop">
+                <div class="product-image">
+                  <img
+                    [src]="'https://drive.google.com/thumbnail?id=' + getImageId(product.image)"
+                    alt="{{ product.name }}"
+                    loading="lazy"
+                  />
+                  <div class="product-actions">
+                    <button class="action-button view-button" (click)="openOrderModal(product)">
+                      <i class="fa-solid fa-eye"></i>
+                    </button>
+                    <button class="action-button cart-button" (click)="openCartModal(product)">
+                      <i class="fa-solid fa-cart-plus"></i>
+                    </button>
+                  </div>
+                </div>
+                <div class="product-details">
+                  <div class="product-header">
+                    <h3 class="product-name">{{ product.name }}</h3>
+                    <span class="product-price">{{ formatPrice(product.price) }} VND</span>
+                  </div>
+                  <p class="product-description">{{ product.description }}</p>
+                  <div class="product-buttons">
+                    <button style="border-radius: 20px" class="order-button" (click)="openOrderModal(product)">
+                      Đặt hàng
+                    </button>
+                  </div>
+                </div>
+              </div>
+            }
+          </div>
+        } @else {
+          <div class="empty-state">
+            <i class="fa-solid fa-utensils empty-icon"></i>
+            <p>Không có sản phẩm nào.</p>
+          </div>
+        }
+      </div>
+    </div>
+
+    <!-- Floating Cart Button with Badge -->
+    <button class="floating-cart-button" (click)="toggleCart()">
+      <i class="fas fa-shopping-cart"></i>
+      @if (cartItemCount > 0) {
+        <span class="cart-badge">{{ cartItemCount }}</span>
+      }
+    </button>
+  </section>
+
+  <!-- Modal chi tiết sản phẩm -->
+  @if (modalVisible && selectedProduct && modalType === 'order') {
+    <app-product-item
+      [product]="selectedProduct"
+      (closeModal)="closeOrderModal()"
+      (placeOrder)="onPlaceOrder($event)"
+    />
+  }
+  @if (modalVisible && selectedProduct && modalType === 'cart') {
+    <app-cart-item
+      [product]="selectedProduct"
+      (closeModal)="closeCartModal()"
+      (placeOrder)="onPlaceOrder($event)"
+    />
+  }
+
+
+  @if (isCartVisible) {
+    <app-cart
+      [isOpen]="isCartVisible"
+      (closeEvent)="toggleCart()"
+    />
+  }
+</main>
+
+@if (toastVisible) {
+  <app-toast
+    [heading]="toastHeading"
+    [description]="toastDescription"
+  />
+}
+

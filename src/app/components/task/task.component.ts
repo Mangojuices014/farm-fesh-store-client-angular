@@ -1,18 +1,17 @@
-import { Component, inject, signal } from '@angular/core';
+import {Component, inject, OnInit, signal} from '@angular/core';
 import { TaskService } from "../../services/task/task.service";
 import { Router } from "@angular/router";
 import { Task } from "../../model/Task";
 import { SidebarComponent } from "../../page/sidebar/sidebar.component";
-import { HeaderComponent } from "../../page/header/header.component";
 
 @Component({
   selector: 'app-task',
   standalone: true,
-  imports: [SidebarComponent, HeaderComponent],
+  imports: [SidebarComponent],
   templateUrl: './task.component.html',
   styleUrl: './task.component.scss'
 })
-export class TaskComponent {
+export class TaskComponent implements OnInit{
   private taskService = inject(TaskService);
   private router = inject(Router);
 
@@ -28,13 +27,15 @@ export class TaskComponent {
 
   checkAdminRole(): void {
     const role = localStorage.getItem("role");
-    this.isAdmin.set(role === "admin");
+    this.isAdmin.set(role?.toLowerCase() === "admin");
   }
 
   ngOnInit(): void {
+    console.log("Admin check:", this.isAdmin());
     if (!this.isAdmin()) return;
     this.loadTasks();
   }
+
 
   loadTasks(): void {
     this.isLoading.set(true);
@@ -42,6 +43,7 @@ export class TaskComponent {
 
     this.taskService.getCompletionTasks().subscribe({
       next: (tasks) => {
+        console.log("Tasks received:", tasks);
         this.tasks.set(tasks);
         this.isLoading.set(false);
       },
@@ -52,6 +54,7 @@ export class TaskComponent {
       },
     });
   }
+
 
   approveTask(taskId: string): void {
     this.loadingTaskId.set(taskId); // Hiện loading

@@ -55,7 +55,7 @@ export class SidebarComponent implements OnInit {
       route: "/admin",
       adminOnly: true,
       children: [
-        { icon: "fa-solid fa-list", label: "Sản phẩm", route: "/admin/products" },
+        { icon: "fa-solid fa-list", label: "Quản lý đơn hàng", route: "/process" },
         { icon: "fa-solid fa-users", label: "Người dùng", route: "/admin/users" },
         { icon: "fa-solid fa-chart-line", label: "Thống kê", route: "/admin/stats" },
       ],

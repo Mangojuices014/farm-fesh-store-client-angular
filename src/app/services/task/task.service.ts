@@ -30,7 +30,7 @@ export class TaskService {
    * Get tasks with taskDefinitionKey=Complete_Order
    */
   getCompletionTasks(): Observable<Task[]> {
-    const url = `${this.apiUrl}`;
+    const url = `${this.apiUrl}/order`;
     return this.http.get<Task[]>(url, { headers: this.getHeaders() });
   }
 

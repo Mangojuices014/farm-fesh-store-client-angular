@@ -163,6 +163,7 @@ export class OTPComponent implements OnInit {
     this.authService.verifyOtp(otp).subscribe({
       next: () => {
         localStorage.removeItem("otpEmail");
+        sessionStorage.removeItem('optRegister');
         this.generateToast('Thành công', 'Xác thực thành công')
         this.router.navigate(["/login"]);
       },

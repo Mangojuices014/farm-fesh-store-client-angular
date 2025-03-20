@@ -21,6 +21,7 @@ export class RegisterComponent implements AfterViewInit {
   accountService = inject(AuthService);
   router = inject(Router)
   toastHeading = ""; toastDescription = ""; toastVisible = false;
+  loading = false
 
   @ViewChild('container') containerRef!: ElementRef;
   camera!: THREE.PerspectiveCamera;
@@ -98,18 +99,28 @@ export class RegisterComponent implements AfterViewInit {
 
   onSubmit(form: NgForm) {
     if (form.valid) {
+      // Đặt loading = true TRƯỚC KHI gọi API
+      this.loading = true
+
       this.accountService.createAccount(form.value).subscribe({
-        next: res => {
-          this.generateToast("Thành công", "Đăng ký thành công");
-          localStorage.setItem('otpEmail', form.value.email);
-          form.reset();
-          this.router.navigate(['/otp']); // Điều hướng đến trang nhập OTP
+        next: (res) => {
+          this.generateToast("Thành công", "Đăng ký thành công")
+          localStorage.setItem("otpEmail", form.value.email)
+          sessionStorage.setItem("optRegister", "true")
+          form.reset()
+          this.router.navigate(["/otp"]) // Điều hướng đến trang nhập OTP
         },
-        error: err => {
+        error: (err) => {
           const errorMessage = err?.error?.message
-          this.generateToast("Thất bại", errorMessage);
-        }
-      });
+          this.generateToast("Thất bại", errorMessage)
+          // Đặt loading = false khi có lỗi
+          this.loading = false
+        },
+        complete: () => {
+          // Đặt loading = false khi hoàn thành
+          this.loading = false
+        },
+      })
     }
   }
 

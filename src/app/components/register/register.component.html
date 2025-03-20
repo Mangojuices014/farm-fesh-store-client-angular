@@ -8,7 +8,24 @@
       <input type="text" placeholder="User Name" required ngModel name="userName" style="border-radius: 10px"/>
       <input type="email" placeholder="Email" required ngModel name="email" style="border-radius: 10px"/>
       <input type="password" placeholder="Mật khẩu" required ngModel name="password" style="border-radius: 10px"/>
-      <input class="form-submit" type="submit" value="Đăng ký" />
+      <!-- Thay thế input submit bằng button để có thể hiển thị nội dung bên trong -->
+      <!-- Kiểm tra xem biến loading có được khai báo đúng không -->
+      <button
+        class="form-submit"
+        type="submit"
+        [disabled]="loading">
+
+        @if (loading) {
+          <div class="spinner-container">
+            <div class="spinner"></div>
+            <span>Đang xử lý...</span>
+          </div>
+        } @else {
+          Đăng ký
+        }
+      </button>
+
+
     </form>
   </div>
   <div class="overlay-container">

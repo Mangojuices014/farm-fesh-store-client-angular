@@ -23,7 +23,21 @@ import {ToastComponent} from "../toast/toast.component";
 })
 export class ApprovalComponent implements OnInit {
   product!: Product;
-  order!: Order;
+  order: Order = {
+    id: '',
+    totalPrice: 1,
+    orderInfo: '',
+    shipment: {
+      address: '',
+      phone: '',
+      email: '',
+      customerName: ''
+    },
+    details: {
+      productId: '',
+      quantity: 1
+    }
+  };
   quantity: number = 1;
   loading = false;
   toastHeading = '';
@@ -37,6 +51,7 @@ export class ApprovalComponent implements OnInit {
     private route: ActivatedRoute,
     private productService: ProductService,
     private orderService: OrderService,
+    private zone: NgZone, // Inject NgZone
     private router: Router
   ) {
   }
@@ -122,11 +137,5 @@ export class ApprovalComponent implements OnInit {
     setTimeout(() => (this.toastVisible = false), 5000);
   }
 
-  confirmOrder(): void {
-    // Xử lý logic xác nhận đơn hàng ở đây
-    // Ví dụ: Gửi yêu cầu API cuối cùng để xác nhận đơn hàng và chuyển hướng người dùng
-    console.log('Đơn hàng đã được xác nhận!');
-    //this.router.navigate(['/order-confirmation']); // Ví dụ: Chuyển hướng đến trang xác nhận đơn hàng
-    this.showToast("Thành công", "Đơn hàng đã được xác nhận thành công");
-  }
+
 }

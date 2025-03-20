@@ -1,31 +1,77 @@
-<main>
+<main class="payment-confirmation">
   <div class="container">
-    <h2>Xác nhận thanh toán</h2>
+    <h2 class="page-title">Xác nhận thanh toán</h2>
 
     @if (loading) {
-      <p>Đang tải thông tin đơn hàng...</p>
-    } @else if (order) {
-      <div class="order-details">
-        <h3>Thông tin đơn hàng</h3>
-        <p>Mã đơn hàng: {{ order.id }}</p>
-        <p>Địa chỉ giao hàng: {{ order.shipment.address }}</p>
-        <p>Tên khách hàng: {{ order.shipment.customerName }}</p>
-
-        <h3>Chi tiết đơn hàng</h3>
-        <ul>
-          <li>
-            Sản phẩm: {{ order.details.productId }}
-            Số lượng: {{ order.details.quantity }}
-          </li>
-          <!-- Lặp qua danh sách sản phẩm nếu có -->
-        </ul>
-
-        <p>{{ order.totalPrice }}</p>
+      <div class="loading-state">
+        <div class="spinner"></div>
+        <p>Đang tải thông tin đơn hàng...</p>
       </div>
+    } @else if (order) {
+      <div class="order-details card">
+        <div class="card-header">
+          <h3>Thông tin đơn hàng</h3>
+          <span class="order-id">Mã đơn hàng: <strong>{{ order.id }}</strong></span>
+        </div>
 
-      <button >Xác nhận thanh toán</button>
+        <div class="card-body">
+          <div class="order-summary">
+            <div class="summary-item">
+              <span>Tổng số sản phẩm:</span>
+              <span>{{ order.totalItem }}</span>
+            </div>
+            <div class="summary-item">
+              <span>Trạng thái:</span>
+              <span [class]="'status-' + order.status.toLowerCase()">{{ order.status }}</span>
+            </div>
+            @if (order.completeDate) {
+              <div class="summary-item">
+                <span>Ngày hoàn thành:</span>
+                <span>{{ order.completeDate | date:'dd/MM/yyyy HH:mm' }}</span>
+              </div>
+            }
+          </div>
+
+          <h4>Chi tiết sản phẩm</h4>
+          @if (order.orderDetails.length) {
+            <ul class="product-list">
+              @for (item of order.orderDetails; track item.productId) {
+                <li class="product-item">
+                  <div class="product-info">
+                    <span class="product-id">Mã sản phẩm: {{ item.productId }}</span>
+                    <span class="product-quantity">Số lượng: {{ item.quantity }}</span>
+                  </div>
+                  <div class="product-price">
+                    <span>Đơn giá: {{ item.price | currency:'VND':'symbol':'1.0-0' }}</span>
+                    <span>Thành tiền: {{ item.totalPrice | currency:'VND':'symbol':'1.0-0' }}</span>
+                  </div>
+                </li>
+              }
+            </ul>
+          } @else {
+            <p>Không có thông tin chi tiết sản phẩm.</p>
+          }
+
+          <div class="order-total">
+            <span>Tổng thanh toán:</span>
+            <span class="total-price">{{ order.totalPrice | currency:'VND':'symbol':'1.0-0' }}</span>
+          </div>
+        </div>
+
+        <div class="card-footer">
+          <button class="btn btn-success" (click)="submitOrder(order)">
+            Xác nhận thanh toán
+          </button>
+          <button class="btn btn-outline-secondary">
+            Hủy đơn hàng
+          </button>
+        </div>
+      </div>
     } @else {
-      <p>Không tìm thấy thông tin đơn hàng.</p>
+      <div class="empty-state">
+        <p>Không tìm thấy thông tin đơn hàng.</p>
+        <button class="btn btn-primary" routerLink="/products">Quay lại trang chủ</button>
+      </div>
     }
   </div>
 </main>
